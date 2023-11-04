@@ -1,14 +1,23 @@
-Saran Perubahan 
-1. id pada table user dibuat menjadi random agar sulit untuk ditebak
+Tertunda
+1. 
 
-
-Penempatan Ambigu
-1. Penempatan file phpMailer sekarang ada di dalam folder model, bagusnya diletakan dimana?
-
-
-table kasir 
-
-1. kode_pesanan
-2. userId
+1. kode_transaksi
+2. userId                           (relasi ke table karyawan)
 3. tanggal_pesanan
-4. 
+4. nama_pelanggan
+5. telpon_pelanggan                 (opsional)
+6. email_pelanggan                  (opsional)
+7. total_harga
+8. diskon                           (opsional)
+9. metode pembayaran
+
+
+table detail_transaksi
+1. kode_transaksi                   (relasi dengan table transaksi)
+2. kode_barang                      (relasi dengan table barang)
+3. jumlah     
+4. sub_total
+5. harga_satuan
+
+   nama         satuan          jumlah      sub total
+1. susu         Rp.1000         2           Rp.2000

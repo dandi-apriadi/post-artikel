@@ -77,5 +77,11 @@ class OwnerModel extends CI_Model{
         return $this->db->count_all_results();
     }
 
-}
+    public function add($data = array()){
+        $this->db->insert($this->table, $data);
+    }
 
+    public function update($data = array()){
+        $this->db->update($this->table, $data);
+    }
+}

@@ -12,7 +12,8 @@ class Register extends CI_Controller {
 		}
 		
         if(isset($_POST['registrasi'])){
-            $this->load->model('UserModel');
+            $this->load->model(['UserModel', 'OwnerModel']);
+            
             $totalUser = $this->UserModel->checkEmail($_POST['email']);
 
             $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
@@ -21,11 +22,8 @@ class Register extends CI_Controller {
             $newToken = str_replace('$', '%24', $token);
             $nama = $_POST['firstname'] . $_POST['lastname'];
             $email = $_POST['email'];
-            $lastId = $this->UserModel->getLastId('user','id');
-            $id = intval($lastId);
-            $id = $id + 1;
+           
             $dataUser = array(
-                'id' => $id,
                 'firstname' => "$_POST[firstname]",
                 'lastname' => "$_POST[lastname]",
                 'email' => "$_POST[email]",
@@ -34,9 +32,18 @@ class Register extends CI_Controller {
                 'role' => "owner",
                 'token' => "$newToken"
             );
+           
+            $dataMailer = array(
+                'nama' => $_POST['firstname'] . $_POST['lastname'],
+                'email' => $_POST['email'],
+                'token' => $newToken
+            );
 
+            if($totalUser == 0){
+            $this->UserModel->add($dataUser);
+
+            $id = $this->db->insert_id();
             $dataOwner = array(
-                'id' => $id,
                 'userId' => $id,
                 'nama_toko' => $_POST['store_name'], 
                 'no_hp' => $_POST['phone_number'],
@@ -45,15 +52,19 @@ class Register extends CI_Controller {
                 'alamat_toko' => $_POST['store_address']
             );
             
-            $dataMailer = array(
-                'nama' => $_POST['firstname'] . $_POST['lastname'],
-                'email' => $_POST['email'],
-                'token' => $newToken
-            );
-            if($totalUser == 0){
-            $this->UserModel->add($dataUser,$dataOwner);
+            $this->OwnerModel->add($dataOwner);
             } else{
-            $this->UserModel->update($dataUser,$dataOwner);
+            $this->UserModel->update($dataUser);
+            $id = $this->db->insert_id();
+            $dataOwner = array(
+                'userId' => $id,
+                'nama_toko' => $_POST['store_name'], 
+                'no_hp' => $_POST['phone_number'],
+                'tipe_toko' => $_POST['store_type'],
+                'slogan_toko' => $_POST['store_slogan'],
+                'alamat_toko' => $_POST['store_address']
+            );
+            $this->OwnerModel->update($dataOwner);
             }
            
             $baseUrl = base_url("/verification/?token=$newToken");
