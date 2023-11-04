@@ -1,0 +1,14 @@
+Saran Perubahan 
+1. id pada table user dibuat menjadi random agar sulit untuk ditebak
+
+
+Penempatan Ambigu
+1. Penempatan file phpMailer sekarang ada di dalam folder model, bagusnya diletakan dimana?
+
+
+table kasir 
+
+1. kode_pesanan
+2. userId
+3. tanggal_pesanan
+4. 
