@@ -22,7 +22,7 @@ class BarangModel extends CI_Model{
     public function getBarang($id) {
         $this->db->where('userId',$id);
         $query = $this->db->get('barang');
-        return $query->result();
+        return $query;
     }
 
   
