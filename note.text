@@ -1,23 +1,48 @@
 Tertunda
-1. 
+1. Modifikasi Pesan Verifikasi Email (jika sudah melakukan Verifikasi tampilkan pesan bahwa user telah berhasil melakukan verifikasi)
 
-1. kode_transaksi
+1. id
 2. userId                           (relasi ke table karyawan)
 3. tanggal_pesanan
-4. nama_pelanggan
-5. telpon_pelanggan                 (opsional)
-6. email_pelanggan                  (opsional)
-7. total_harga
-8. diskon                           (opsional)
-9. metode pembayaran
+4. total_harga
+5. diskon                           (opsional)
+6. metode pembayaran
+7. Pembayaran                       (Jumlah Pembayaran Pelanggan)
 
 
 table detail_transaksi
-1. kode_transaksi                   (relasi dengan table transaksi)
+1. transaksiId                  (relasi dengan table transaksi)
 2. kode_barang                      (relasi dengan table barang)
 3. jumlah     
 4. sub_total
 5. harga_satuan
 
-   nama         satuan          jumlah      sub total
-1. susu         Rp.1000         2           Rp.2000
+
+   Contoh Struk
+
+   +----------------------------+--------------------------+
+   | Selogan Toko               |       Logo Toko          |
+   | Melayani Dengan Seyuman dan|                          |
+   | Hati Yang Tulus            |                          |
+   +----------------------------+--------------------------+
+   |  Jln Politeknik Negeri Manado, Perumahan Poligriya    |
+   | Indah. Dekat Kampus Politeknik Negeri Manado          |
+   +----------------------------+--------------------------+
+   | 16-12-23 - 20:41           |kode-pesanan/namapelanggan|
+   +----------------------+-----+-------+------+-----------+
+   | Produk               | Harga satuan|jumlah| Sub total |
+   +----------------------+-------------+------+-----------+
+   | Susu Ultra           | Rp.10.000   | x2   | Rp.20.000 |
+   | Rokok Surya          | Rp.40.000   | x1   | Rp.40.000 | 
+   | Chimori              | Rp.11.000   | x2   | Rp.22.000 | 
+   +-------------------------------------------------------+
+   |                              | Harga Jual : Rp.82.000 |
+   |                              | Diskon 10% : Rp.8.200  |
+   |                              +------------------------+
+   |                              |      Total : Rp.71.800 |
+   |                              |      Tunai : Rp.90.000 |
+   +-------------------------------------------------------+
+   |           Bantu Dagang SMS / Wa 0851-6154-2103        |
+   |   Kunjungi saskardigital.com untuk mendapatkan promo  |
+   |                    terbaru dari kami                  |
+   +-------------------------------------------------------+
