@@ -37,10 +37,10 @@ if (isset($message)) {
                                     <div class="col-md-4">
                                         <div class="card px-2 py-1">
                                             <div class="product-card">
-                                                <img class="product-image" src="https://source.unsplash.com/600x401/?nutmeg" alt="Produk 1">
-                                                <h4>Nama Produk 1</h4>
-                                                <p>Harga: $10</p>
-                                                <p>Stok Tersisa: 20</p>
+                                                <img class="product-image" style="height:250px;" src="<?=base_url('assets/images/barang/'.$item->gambar)?>" alt="<?=$item->nama_barang?>">
+                                                <h4><?=$item->nama_barang?></h4>
+                                                <p>Harga: Rp. <?=number_format($item->harga, 0, '.', ',');?></p>
+                                                <p>Stok Tersisa: <?=$item->stok?></p>
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <button id="decrement" class="btn btn-outline-secondary" type="button">-</button>
@@ -82,7 +82,6 @@ if (isset($message)) {
 </div>
 
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
