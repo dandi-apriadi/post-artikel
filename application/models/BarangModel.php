@@ -19,8 +19,8 @@ class BarangModel extends CI_Model{
         $this->db->insert($this->table, $data);
     }
 
-    public function getBarang() {
-        $this->db->where('userId',$_SESSION['id_user']);
+    public function getBarang($id) {
+        $this->db->where('userId',$id);
         $query = $this->db->get('barang');
         return $query->result();
     }

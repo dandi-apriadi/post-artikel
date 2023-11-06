@@ -16,7 +16,7 @@ class Barang extends CI_Controller {
 	public function index(){
         $data['title'] = "Daftar Barang";
 		$data['getUser'] = $this->AuthModel->getDataLoggedIn($_SESSION['id_user']);
-        $data['barang'] = $this->BarangModel->getBarang();
+        $data['barang'] = $this->BarangModel->getBarang($_SESSION['id_user']);
 
 		// jika bukan admin yg login, maka tdk bisa kesini
 		if ($data['getUser']->role != 'owner')

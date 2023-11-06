@@ -31,4 +31,4 @@ $route['owner/list'] = 'Owner/list';
 
 
 //kasir
-$route['kasir/tambah-pesanan'] = 'Kasir/tambah';
+$route['kasir/add'] = 'Kasir/tambah';

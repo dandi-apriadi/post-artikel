@@ -31,35 +31,10 @@
           </a>
         </li>
 
-        <!-- Menu Kasir -->
-        <?php if($getKaryawan->status_karyawan == 'cashier'){ ?>
-
         <li class="nav-item">
           <a href="#" class="nav-link">
             <i class="fas fa-user nav-icon"></i>
-            <p>Menu kasir<i class="fas fa-angle-left right"></i></p>
-          </a>
-          <ul class="nav nav-treeview">
-            <li class="nav-item">
-              <a href="<?= base_url('kasir/add') ?>" class="nav-link">
-              <i class="fas fa-cash-register nav-icon"></i>
-                <p>Tambah Transaksi</p>
-              </a>
-              <a href="<?= base_url('kasir/list') ?>" class="nav-link">
-              <i class="fas fa-receipt nav-icon"></i> 
-                <p>Data Transaksi</p>
-              </a>
-            </li>
-          </ul>
-        </li>
-
-        <!-- Menu Teknisi -->
-        <?php } else if($getKaryawan->status_karyawan == 'teknisi'){ ?>
-          
-        <li class="nav-item">
-          <a href="#" class="nav-link">
-            <i class="fas fa-user nav-icon"></i>
-            <p><i class="fas fa-angle-left right"></i></p>
+            <p>Manage User<i class="fas fa-angle-left right"></i></p>
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
@@ -74,9 +49,6 @@
             </li>
           </ul>
         </li>
-
-        <?php } ?>
-
 
         <li class="nav-header">MORE</li>
 

@@ -1,3 +1,7 @@
+Source 
+
+<!-- https://source.unsplash.com/600x401/?nutmeg -->
+
 Tertunda
 1. Modifikasi Pesan Verifikasi Email (jika sudah melakukan Verifikasi tampilkan pesan bahwa user telah berhasil melakukan verifikasi)
 
@@ -12,7 +16,7 @@ Tertunda
 
 table detail_transaksi
 1. transaksiId                  (relasi dengan table transaksi)
-2. kode_barang                      (relasi dengan table barang)
+2. barangId                     (relasi dengan table barang)
 3. jumlah     
 4. sub_total
 5. harga_satuan

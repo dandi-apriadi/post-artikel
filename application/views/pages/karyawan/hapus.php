@@ -11,7 +11,6 @@ if (isset($message)) {
 
 ?>
 
-<!-- https://source.unsplash.com/600x401/?nutmeg -->
 
 <div class="wrapper">
   <!-- Sidebar -->
