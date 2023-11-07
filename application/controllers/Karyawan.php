@@ -97,8 +97,31 @@ class Karyawan extends CI_Controller {
 			'required' => 'Tidak boleh kosong',
 		));
 
+
 		if($this->form_validation->run()){
+            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+			$dataUser = array(
+                'firstname' => $this->input->post('firstName'),
+                'lastname' => $this->input->post('lastName'),
+                'email' => $this->input->post('email'),
+                'password' => $password,
+                'role' => 'karyawan',
+                'verified_email' => $this->input->post('statusKaryawan')
+            );
 			
+            $this->UserModel->add($dataUser);
+			$id = $this->db->insert_id();
+            $dataKaryawan = array(
+                'userId' => $id,
+                'ownerId' => $_SESSION['id_user'],
+                'nama_karyawan' => $this->input->post('firstName') . $this->input->post('lastName'),
+                'status_karyawan' => $this->input->post('jabatan'),
+                'no_hp' => $this->input->post('phoneNumber')
+            );
+			
+            $this->KaryawanModel->addkaryawan($dataKaryawan);
+
 			$this->session->set_flashdata('msg_sweetalert', '<script>Swal.fire({
 				title: "Berhasil",
 				text: "Pegawai Berhasil diTambahkan",
@@ -197,23 +220,23 @@ class Karyawan extends CI_Controller {
                     );
                     redirect("/karyawan/edit/".$id);
                 }
-               
             }
 
             $dataUser = array(
 				'id' => $id,
-                'firstname' => $_POST['firstName'],
-                'lastname' => $_POST['lastName'],
-                'email' => $_POST['email'],
-                'password' => $password,
-                'verified_email' => $_POST['status_aktif']
+                'firstname' => $this->input->post('firstName'),
+                'lastname' => $this->input->post('lastName'),
+                'email' => $this->input->post('email'),
+                'password' => $password, 
+                'verified_email' => $this->input->post('statusKaryawan'),
+                'role' => 'karyawan' 
             );
 
             $dataKaryawan = array(
                 'userId' => $id,
-                'nama_karyawan' => $_POST['firstName'] . $_POST['lastName'],
-                'status_karyawan' => $_POST['jabatan'],
-                'no_hp' => $_POST['phone']
+                'nama_karyawan' => $this->input->post('firstName') . $this->input->post('lastName'),
+                'status_karyawan' => $this->input->post('jabatan'),
+                'no_hp' => $this->input->post('phoneNumber')
             );
 
             $this->KaryawanModel->updateKaryawan($dataKaryawan);

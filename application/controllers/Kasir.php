@@ -19,7 +19,7 @@ class Kasir extends CI_Controller {
 		$data['getKaryawan'] = $this->KaryawanModel->getById($_SESSION['id_user']);
 		$dataKaryawan = $this->KaryawanModel->getById($_SESSION['id_user']);
         $data['barang'] = $this->BarangModel->getBarang($dataKaryawan->ownerId);
-		
+        $data['cache'] = $this->KasirModel->getcache();
 		// jika bukan admin yg login, maka tdk bisa kesini
 		if ($data['getUser']->role != 'karyawan')
 			redirect('dashboard');
@@ -33,4 +33,16 @@ class Kasir extends CI_Controller {
 		$this->load->view('templates/dashboard/footer');
     }
 
+	public function execute_action() {
+		$data = array(
+			'userId' => $_SESSION['id_user'],
+			'nama_barang' => $this->input->post('namaBarang'),
+			'jumlah_barang' => $this->input->post('jumlah'),
+			'harga_satuan' => $this->input->post('harga'),
+		);
+		$this->KasirModel->addcache($data);
+        echo "
+		
+		";
+    }
 }
