@@ -280,7 +280,7 @@ if (isset($message)) {
                     namaBarang: namaBarang,
                     harga: harga,
                     jumlah: currentQuantity,
-                    
+                    barangId: 
                 },
                 success: function(response) {
                     $("#detailbarang").html(response);
