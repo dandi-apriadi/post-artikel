@@ -136,41 +136,6 @@
     </div>
   </div>
 
-  <!-- <div class="container mt-5 mb-5">
-    <div class="row justify-content-md-center">
-      <div class="col-md-5">
-        
-        <div class="card shadow">
-          <div class="card-body">
-            
-            <center><img src="<?= base_url('assets/images/logo_polimdo.png') ?>" class="img-fluid" style="height: 200px;"></center>
-
-            <h3 align="center" class="mt-3">Sistem Informasi Akreditasi Polimdo</h3><hr/>
-            <h5>Login Dashboard</h5>
-
-            <form method="post" action="">
-              <div class="form-group mt-3">
-                <label for="username">Username</label>
-                <input type="text" name="username" id="username" class="form-control" placeholder="Username">
-              </div>
-              <div class="form-group mt-3">
-                <label for="password">Password</label>
-                <input type="password" name="password" id="password" class="form-control" placeholder="Password">
-              </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <button type="submit" name="login" class="btn btn-primary btn-block">Login</button>
-                </div>
-              </div>
-            </form>
-
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div> -->  
-
   <script src="<?= base_url('assets/homepage/bootstrap/js/popper.min.js') ?>"></script>
   <script src="<?= base_url('assets/homepage/bootstrap/js/bootstrap.min.js') ?>"></script>
 

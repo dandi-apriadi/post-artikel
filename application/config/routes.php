@@ -29,6 +29,9 @@ $route['barang/detail/(:num)'] = 'Barang/detail/$1';
 //owner
 $route['owner/list'] = 'Owner/list';
 
-
 //kasir
 $route['kasir/add'] = 'Kasir/tambah';
+
+// Teknisi
+$route['nota/add'] = 'Nota/add';
+$route['nota/list'] = 'Nota/list';
