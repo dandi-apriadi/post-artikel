@@ -24,8 +24,6 @@ if (isset($message)) {
                     <div class="card-body">
                         <h1 class="">Daftar Barang</h1> <hr/>
 
-                        
-
                         <?php if($barang->num_rows() > 0){ ?>
                             <div class="row">
 
