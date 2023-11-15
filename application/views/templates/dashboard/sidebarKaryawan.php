@@ -77,7 +77,6 @@
 
         <?php } ?>
 
-
         <li class="nav-header">MORE</li>
 
         <li class="nav-item">

@@ -63,7 +63,7 @@ if (isset($message)) {
         
         .card-payment{
             position: absolute;
-            width: 300px; /* Tinggi maksimum 150 piksel */
+            width: 500px; /* Tinggi maksimum 150 piksel */
             right:2px;
             border:2px;
         }
@@ -83,18 +83,32 @@ if (isset($message)) {
                     <div class="payment-input">
                             <div class="card">
                                 <div class="card-body card-payment">
-                                    <div class="">
-                                        <label for="jenisPembayaran">Jenis Pembayaran:</label>
-                                        <select name="jenisPembayaran" class="form-control" id="jenisPembayaran">
-                                            <option value="tunai">Tunai</option>
-                                            <option value="debit">Debit</option>
-                                            <option value="kredit">Kredit</option>
-                                        </select>
-                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="jenisPembayaran">Jenis Pembayaran:</label>
+                                            <select name="jenisPembayaran" class="form-control" id="jenisPembayaran">
+                                                <option value="tunai">Tunai</option>
+                                                <option value="debit">Debit</option>
+                                                <option value="kredit">Kredit</option>
+                                            </select>
+                                        </div>
 
-                                    <div class="">
-                                        <label for="jumlahBayar">Jumlah Bayar:</label>
-                                        <input type="text" class="form-control" name="jumlahBayar" placeholder="Contoh: 20000" id="jumlahBayar">
+                                        <div class="col-md-6">
+                                            <label for="jumlahBayar">Jumlah Bayar:</label>
+                                            <input type="number" class="form-control" name="jumlahBayar" placeholder="Contoh: 20000" id="jumlahBayar">
+                                        </div>
+
+                                        <div class="col-md-6">
+                                        </div>
+
+                                        <div class="col-md-6 mt-2 text-right">
+
+                                            <form action="" method="post">
+                                            <button onclick="SaveStruct();" type="button" class="btn btn-primary">Simpan</button>
+
+                                            <input name="finish" type="submit" class="btn btn-success" value="Selesai">
+                                            </form>
+                                        </div>
                                     </div>
 
                                 </div>
@@ -127,8 +141,8 @@ if (isset($message)) {
                                             <div class="product-card">
                                                 <img class="product-image" style="height:250px;" src="<?=base_url('assets/images/barang/'.$item->gambar)?>" alt="<?=$item->nama_barang?>">
                                                 <h4><?=$item->nama_barang?></h4>
-                                                <p>Harga: <?=$index?> Rp. <?=number_format($item->harga, 0, '.', ',');?></p>
-                                                <p>Stok Tersisa: <?=$item->stok?></p>
+                                                <p>Harga: Rp. <?=number_format($item->harga, 0, '.', ',');?></p>
+                                                <p>Stok Tersisa: <span id="stok-tersisa-<?=$index?>"><?=$item->stok?></span></p>
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <button onclick="decrement(<?=$index?>);" id="decrement-<?=$index?>" class="btn btn-outline-secondary" type="button">-</button>
@@ -155,7 +169,7 @@ if (isset($message)) {
                 </div>
             </div>
                 <!-- Bagian Struk Pesanan -->
-                    <div id="detailbarang" class="struk-container">
+                    <div class="struk-container">
                             <div class="logo">
                                 <img src="<?=base_url('assets/images/logo/sutanstore.png');?>" alt="Logo Toko">
                             </div>
@@ -170,20 +184,20 @@ if (isset($message)) {
                             <table class="table-borderless">
                                 <tbody>
                                 <tr style="margin-bottom: px;">
-                                    <th style="padding-right: 10px;">Kasir:</th>
-                                    <td style="padding-left: 10px;">Data Kasir</td>
+                                    <th style="padding-right: 10px;">Kasir</th>
+                                    <td style="padding-left: 10px;">: <?=$getUser->firstname ." ". $getUser->lastname?></td>
                                 </tr>
                                 <tr style="margin-bottom: px;">
-                                    <th style="padding-right: 10px;">Waktu:</th>
-                                    <td style="padding-left: 10px;">2023-11-06 14:30</td>
+                                    <th style="padding-right: 10px;">Waktu</th>
+                                    <td style="padding-left: 10px;" id='waktu-transaksi'>: </td>
                                 </tr>
                                 <tr style="margin-bottom: -5px;">
-                                    <th style="padding-right: 10px;">No. Struk:</th>
-                                    <td style="padding-left: 10px;">12345</td>
+                                    <th style="padding-right: 10px;">No. Struk</th>
+                                    <td style="padding-left: 10px;" id="no-struk">: </td>
                                 </tr>
                                 <tr style="margin-bottom: px;">
-                                    <th style="padding-right: 10px;">Jenis Pembayaran:</th>
-                                    <td style="padding-left: 10px;">Kartu Kredit</td>
+                                    <th style="padding-right: 10px;">Jenis Pembayaran</th>
+                                    <td style="padding-left: 10px;" id="jenis-pembayaran">: </td>
                                 </tr>
                                                         </tbody>
                             </table>
@@ -199,7 +213,7 @@ if (isset($message)) {
                                             <th>Subtotal</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="detailbarang">
                                         <?php $biaya=0;?>
                                         <?php foreach ($cache->result() as $item): ?>
                                         <tr>
@@ -211,22 +225,22 @@ if (isset($message)) {
                                             $subTotal = $item->harga_satuan * $item->jumlah_barang;
                                             $biaya = $biaya + $subTotal;      
                                             ?>
-                                        </tr>
+                                        </tr>   
                                     <?php endforeach; ?>
                                         <!-- Tambahkan baris untuk barang-barang lainnya di sini -->
                                     </tbody>
                                 </table>
                             <div class="divider"></div>
-                            <div class="total-text text-right">
+                            <div id="total-biaya" class="total-text text-right">
                                 Total Biaya: Rp.<?=number_format($biaya, 0, '.', ',');?>
                             </div>
                             <div class="divider"></div>
                             <div class="detail">
-                                <div class="detail-item">
-                                    Bayar/Uang Pelanggan: $40
+                                <div class="detail-item" id="uang-pelanggan">
+                                    Bayar/Uang Pelanggan: Rp.
                                 </div>
-                                <div class="detail-item">
-                                    Kembalian: $5
+                                <div class="detail-item" id="uang-kembalian">
+                                    Kembalian: Rp.
                                 </div>
                             </div>
                             <div class="divider"></div>
@@ -243,6 +257,40 @@ if (isset($message)) {
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+
+        function SaveStruct(){
+            var jenisPembayaran = document.getElementById("jenisPembayaran").value;
+            var uangPelanggan = document.getElementById("jumlahBayar").value;
+            $.ajax({
+                url: "<?php echo base_url('Kasir/saveTransaction'); ?>",
+                type: "POST",
+                data: {
+                    jenisPembayaran: jenisPembayaran,
+                    uangPelanggan: uangPelanggan
+                },
+                success: function(response) {
+                }
+            });
+
+            
+            $.ajax({
+                url: "<?php echo base_url('Kasir/getDataTransaction'); ?>",
+                type: "GET",
+                dataType: 'json',
+                data: {},
+                success: function(response) {
+                    $("#waktu-transaksi").html(`: ${response.waktuTransaksi}`);
+                    $("#uang-pelanggan").html(`Bayar/Uang Pelanggan: Rp.${response.uangPelanggan}`);
+                    $("#uang-kembalian").html(`Kembalian: Rp.${response.uangKembalian}`);
+                    $("#no-struk").html(`: ${response.noTransaksi}`);
+                    $("#jenis-pembayaran").html(`: ${response.jenisPembayaran}`);
+                    },
+                    error: function(error) {
+                        console.error('Error:', error);
+                    }
+                });
+
+        }
 
         function increment(index){
             const decrementButton = document.getElementById("decrement-"+index);
@@ -268,23 +316,57 @@ if (isset($message)) {
             const namaBarang = document.getElementById("namaBarang-"+index).value;
             const harga = document.getElementById("harga-"+index).value;
             const barangId = document.getElementById("barangId-"+index).value;
-            const jumlahBayar = document.getElementById("jumlahBayar").value;
-            const jenisBayar = document.getElementById("jenisPembayaran").value;
             const quantityInput = document.getElementById("quantity-"+index);
             let currentQuantity = parseInt(quantityInput.value);
+            var stokTersisa = document.getElementById("stok-tersisa-"+index).innerHTML;
 
-            $.ajax({
-                url: "<?php echo base_url('Kasir/execute_action'); ?>",
-                type: "POST",
-                data: {
-                    namaBarang: namaBarang,
-                    harga: harga,
-                    jumlah: currentQuantity,
-                    barangId: 
-                },
-                success: function(response) {
-                    $("#detailbarang").html(response);
-                }
-            });
+            var stok = parseInt(stokTersisa); 
+
+            if(currentQuantity > stok){
+                alert("Jumlah Stok tidak Memadai");
+                document.getElementById("quantity-"+index).value=1;
+            }else{
+                $.ajax({
+                    url: "<?php echo base_url('Kasir/execute_action'); ?>",
+                    type: "POST",
+                    data: {
+                        namaBarang: namaBarang,
+                        harga: harga,
+                        jumlah: currentQuantity,
+                        barangId: barangId
+                    },
+                    success: function(response) {
+                        $.ajax({
+                        url: "<?php echo base_url('Kasir/cache_transaksi'); ?>",
+                        type: "GET",
+                        dataType: 'json',
+                        data: {},
+                        success: function(response) {
+                            // Proses data JSON yang diterima dengan looping
+                            $("#detailbarang").empty();
+                            $("#total-biaya").html(`
+                            Total Biaya: Rp.${response.totalBiaya}
+                            `);
+                            $.each(response.data, function(index, item) {
+                                // Tambahkan baris HTML untuk setiap elemen
+                                $("#detailbarang").append(
+                                    `
+                                    <tr>
+                                        <td>${item.nama_barang}</td>
+                                        <td>x${item.jumlah_barang}</td>
+                                        <td>Rp.${item.harga}</td>
+                                        <td>Rp.${item.sub_total}</td>
+                                    </tr>
+                                    `
+                                );
+                            });
+                            },
+                            error: function(error) {
+                                console.error('Error:', error);
+                            }
+                        });
+                    }
+                });
+            }
         }
     </script>
