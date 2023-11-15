@@ -371,5 +371,19 @@ if (isset($message)) {
                     }
                 });
             }
+          
+            $.ajax({
+                url: "<?php echo base_url('Kasir/execute_action'); ?>",
+                type: "POST",
+                data: {
+                    namaBarang: namaBarang,
+                    harga: harga,
+                    jumlah: currentQuantity,
+                    // barangId: 
+                },
+                success: function(response) {
+                    $("#detailbarang").html(response);
+                }
+            });
         }
     </script>
