@@ -54,21 +54,21 @@
         </li>
 
         <!-- Menu Teknisi -->
-        <?php } else if($getKaryawan->status_karyawan == 'teknisi'){ ?>
+        <?php }else if($getKaryawan->status_karyawan == 'teknisi'){ ?>
           
-        <li class="nav-item">
+          <li class="nav-item">
           <a href="#" class="nav-link">
-            <i class="fas fa-user nav-icon"></i>
-            <p>Menu Teknisi<i class="fas fa-angle-left right"></i></p>
+          <i class="fas fa-sticky-note nav-icon"></i>
+            <p>Managament Nota <i class="fas fa-angle-left right"></i></p>
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="<?= base_url('user/add-dosen') ?>" class="nav-link">
-                <i class="fas fa-plus-square nav-icon"></i>
+              <a href="<?= base_url('nota/add') ?>" class="nav-link">
+              <i class="fas fa-plus-square nav-icon"></i>
                 <p>Tambah Nota</p>
               </a>
-              <a href="<?= base_url('user/add-assesor') ?>" class="nav-link">
-                <i class="fas fa-plus-square nav-icon"></i>
+              <a href="<?= base_url('nota/list') ?>" class="nav-link">
+              <i class="fas fa-receipt nav-icon"></i> 
                 <p>Data Nota</p>
               </a>
             </li>
@@ -78,6 +78,13 @@
         <?php } ?>
 
         <li class="nav-header">MORE</li>
+
+        <li class="nav-item">
+          <a href="<?= base_url('teknisi/profil') ?>" class="nav-link">
+            <i class="fas fa-user nav-icon"></i>
+            <p>Profil</p>
+          </a>
+        </li>
 
         <li class="nav-item">
           <a href="<?= base_url('change-pass') ?>" class="nav-link">

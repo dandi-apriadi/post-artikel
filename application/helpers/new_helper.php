@@ -29,4 +29,9 @@ function formatTanggal($date){
   return $pecah[2].'-'.$pecah[1].'-'.$pecah[0];
 }
 
+function rupiah($angka){
+    $hasil_rupiah = "Rp. " . number_format($angka,0,',','.');
+    return $hasil_rupiah;
+}
+
 ?>
