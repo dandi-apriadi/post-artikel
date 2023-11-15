@@ -234,6 +234,9 @@ if (isset($message)) {
                                 <div class="detail-item">
                                     Rekening: BCA 0262026190 Irtan Sutan Montolalu
                                 </div>
+                                
+                                <div id="kembalian">20000</div>
+
                             </div>
                         </div>
                     </div>
@@ -280,7 +283,7 @@ if (isset($message)) {
                     namaBarang: namaBarang,
                     harga: harga,
                     jumlah: currentQuantity,
-                    barangId: 
+                    // barangId: 
                 },
                 success: function(response) {
                     $("#detailbarang").html(response);

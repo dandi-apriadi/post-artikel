@@ -5,7 +5,7 @@ class Nota extends CI_Controller {
 
 	public function __construct(){
 		parent::__construct();
-		$this->load->model(['AuthModel', 'UserModel', 'KaryawanModel', 'NotaModel']);
+		$this->load->model(['AuthModel', 'UserModel', 'KaryawanModel', 'NotaModel', 'OwnerModel']);
 
 		// jika belum login, tdk bisa kesini
 		if (!isset($_SESSION['logged_in'])) {
@@ -124,6 +124,14 @@ class Nota extends CI_Controller {
 			$no++;
 			$row = array();
 
+			if($nota->status == 'selesai'){
+				$row[] = '<font color="green"><i class="fas fa-check"></i></font>';
+			}else if($nota->status == 'batal'){
+				$row[] = '<font color="red"><i class="fas fa-times"></i></font>';
+			}else if($nota->status == 'proses'){
+				$row[] = '-';
+			}
+			
 			$row[] = $no;
 			$row[] = formatTanggal($nota->tglMasuk);
 			$row[] = formatTanggal($nota->tglPengambilan);
@@ -132,13 +140,8 @@ class Nota extends CI_Controller {
 			$row[] = $nota->kerusakan;
 			$row[] = rupiah($nota->hargaService);
 			
-			// $row[] = "
-            // 	<a class='btn btn-primary' href='$edit'>Edit</a>
-            // 	<a class='btn btn-danger ml-2' href='$hapus'>Hapus</a>
-            // ";
-
 			$row[] = "
-            	-
+            	<a href='".base_url('nota/detail/'.$nota->id)."' class='btn btn-primary btn-sm'>Detail</a>
             ";
 
 			$data[] = $row;
@@ -153,6 +156,45 @@ class Nota extends CI_Controller {
 
 	    //output to json format
         echo json_encode($output);
+	}
+
+	public function detail($id){
+		$data['title'] = "Data Nota";
+		$data['getUser'] = $this->AuthModel->getDataLoggedIn($_SESSION['id_user']);
+		$data['getKaryawan'] = $this->KaryawanModel->getById($_SESSION['id_user']);
+		$data['getOwner'] = $this->OwnerModel->getById($data['getKaryawan']->ownerId);
+		$data['getNota'] = $this->NotaModel->getById($id);
+
+        if($data['getKaryawan']->status_karyawan != 'teknisi')
+            redirect('dashboard');
+
+		if(isset($_GET['status'])){
+			if($_GET['status'] == 'selesai'){
+				$this->NotaModel->updateStatus($id, $_GET['status']);
+
+				$this->session->set_flashdata('msg_sweetalert', '<script>Swal.fire({
+					title: "Berhasil",
+					text: "Service telah diselesaikan",
+					icon: "success",})</script>'
+				);
+			}else if($_GET['status'] == 'batal'){
+				$this->NotaModel->updateStatus($id, $_GET['status']);
+
+				$this->session->set_flashdata('msg_sweetalert', '<script>Swal.fire({
+					title: "Berhasil",
+					text: "Service telah dibatalkan",
+					icon: "success",})</script>'
+				);
+			}
+
+            redirect('nota/list');
+		}
+
+		$this->load->view('templates/dashboard/head', $data);
+		$this->load->view('templates/dashboard/navbar', $data);
+		$data['sidebar'] = $this->load->view('templates/dashboard/sidebarKaryawan', $data, true);
+		$this->load->view('pages/nota/detail', $data);
+		$this->load->view('templates/dashboard/footer');
 	}
 
 }

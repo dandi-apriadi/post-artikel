@@ -81,6 +81,13 @@
         <li class="nav-header">MORE</li>
 
         <li class="nav-item">
+          <a href="<?= base_url('teknisi/profil') ?>" class="nav-link">
+            <i class="fas fa-user nav-icon"></i>
+            <p>Profil</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
           <a href="<?= base_url('change-pass') ?>" class="nav-link">
             <i class="fas fa-cog nav-icon"></i>
             <p>Ganti Password</p>

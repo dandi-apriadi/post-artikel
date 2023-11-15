@@ -66,4 +66,23 @@ class NotaModel extends CI_Model{
         return $this->db->count_all_results();
     }
 
+    public function getById($id){
+        return $this->db->get_where($this->table, array('id' => $id))->row();
+    }
+
+    // update status service
+    public function updateStatus($id, $status){
+        $this->db->where('id', $id);
+        return $this->db->update($this->table, array('status' => $status));
+    }
+
+    // count total service by status
+    public function countServiceByStatus($status, $teknisiId){
+        $this->db->where('teknisiId', $teknisiId);
+        $this->db->where('status', $status);
+        $this->db->select('id');
+        $this->db->from($this->table);
+
+        return $this->db->get()->num_rows();
+    }
 }
