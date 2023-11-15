@@ -72,7 +72,7 @@
       <h3 align="center">BaDag - Pendaftaran Toko</h3>
       <h5 align="center">Kami siap membantu dagangan Anda</h5><br/>
 
-      <center><a href="<?= base_url('homepage')?>" class="btn btn-outline-light">Masuk Ke Akun anda <i class="fas fa-arrow-down"></i></a></center>
+      <center><a href="<?= base_url() ?>" class="btn btn-outline-light">Masuk Ke Akun anda <i class="fas fa-arrow-down"></i></a></center>
     </div>
     <div class="col-md-6 content-right">
       <h3>Selamat Datang di Aplikasi BaDag</h3>
@@ -82,85 +82,59 @@
       <div>Silahkan Masukkan Data Anda</div>
 
       <div class="container mt-5">
-      <form method="post" action="">
+        <form method="post" action="">
 
-        <div class="row">
-            <div class="col-md-6">
+          <div class="row">
+              <div class="col-md-6">
                 <h2 class="text-center">Data Pengguna</h2>
-                    <div class="form-group mt-3">
-                        <input type="text" name="firstname" id="firstname" class="form-control" placeholder="First Name">
-                    </div>
-                    <div class="form-group mt-3">
-                        <input type="text" name="lastname" id="lastname" class="form-control" placeholder="Last Name">
-                    </div>
-                    <div class="form-group mt-3">
-                        <input type="email" name="email" id="email" class="form-control" placeholder="someone@gmail.com">
-                    </div>
-                    <div class="form-group mt-3">
-                        <input type="password" name="password" id="password" class="form-control" placeholder="Password">
-                    </div>
+                <div class="form-group mt-3">
+                    <input type="text" name="firstname" id="firstname" class="form-control" placeholder="First Name">
+                </div>
+                <div class="form-group mt-3">
+                    <input type="text" name="lastname" id="lastname" class="form-control" placeholder="Last Name">
+                </div>
+                <div class="form-group mt-3">
+                    <input type="email" name="email" id="email" class="form-control" placeholder="someone@gmail.com">
+                </div>
+                <div class="form-group mt-3">
+                    <input type="password" name="password" id="password" class="form-control" placeholder="Password">
+                </div>
+              </div>
+              <div class="col-md-6">
+                  <h2 class="text-center">Data Toko</h2>
+
+                  <div class="form-group mt-3">
+                      <input type="text" name="store_name" id="store_name" class="form-control" placeholder="Nama Toko" required>
+                  </div>
+                  <div class="form-group mt-3">
+                      <input type="tel" name="phone_number" id="phone_number" class="form-control" placeholder="Nomor Telepon" required>
+                  </div>
+                  <div class="form-group mt-3">
+                      <input type="text" name="store_type" id="store_type" class="form-control" placeholder="Tipe Toko" required>
+                  </div>
+                  <div class="form-group mt-3">
+                      <input type="text" name="store_slogan" id="store_slogan" class="form-control" placeholder="Slogan Toko" required>
+                  </div>
+              </div>
+              
+          </div>
+          <div class="form-group">
+              <textarea name="store_address" id="store_address" rows="4" class="form-control"  placeholder="Alamat Toko" required></textarea>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4">
+              <button type="submit" name="registrasi" class="btn btn-primary btn-block">Registrasi</button>
             </div>
-            <div class="col-md-6">
-                <h2 class="text-center">Data Toko</h2>
-                    <div class="form-group mt-3">
-                        <input type="text" name="store_name" id="store_name" class="form-control" placeholder="Nama Toko" required>
-                    </div>
-                    <div class="form-group mt-3">
-                        <input type="tel" name="phone_number" id="phone_number" class="form-control" placeholder="Nomor Telepon" required>
-                    </div>
-                    <div class="form-group mt-3">
-                        <input type="text" name="store_type" id="store_type" class="form-control" placeholder="Tipe Toko" required>
-                    </div>
-                    <div class="form-group mt-3">
-                        <input type="text" name="store_slogan" id="store_slogan" class="form-control" placeholder="Slogan Toko" required>
-                    </div>
-            </div>
-            
-        </div>
-        <div class="form-group mt-3">
-            <textarea name="store_address" id="store_address" rows="4" class="form-control"  placeholder="Alamat Toko" required></textarea>
-        </div>
-        <button type="submit" name="registrasi" class="btn btn-primary btn-block mt-3">Registrasi</button>
-    </div>
-    </form>
+          </div>
+
+        </form><br/>
+
+        <div align="center">Toko Anda sudah terdaftar? <a href="<?= base_url() ?>">Login Sekarang</a></div>
+      </div>
 
     </div>
   </div>
-
-  <!-- <div class="container mt-5 mb-5">
-    <div class="row justify-content-md-center">
-      <div class="col-md-5">
-        
-        <div class="card shadow">
-          <div class="card-body">
-            
-            <center><img src="<?= base_url('assets/images/logo_polimdo.png') ?>" class="img-fluid" style="height: 200px;"></center>
-
-            <h3 align="center" class="mt-3">Sistem Informasi Akreditasi Polimdo</h3><hr/>
-            <h5>Login Dashboard</h5>
-
-            <form method="post" action="">
-              <div class="form-group mt-3">
-                <label for="username">Username</label>
-                <input type="text" name="username" id="username" class="form-control" placeholder="Username">
-              </div>
-              <div class="form-group mt-3">
-                <label for="password">Password</label>
-                <input type="password" name="password" id="password" class="form-control" placeholder="Password">
-              </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <button type="submit" name="login" class="btn btn-primary btn-block">Login</button>
-                </div>
-              </div>
-            </form>
-
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div> -->  
 
   <script src="<?= base_url('assets/homepage/bootstrap/js/popper.min.js') ?>"></script>
   <script src="<?= base_url('assets/homepage/bootstrap/js/bootstrap.min.js') ?>"></script>

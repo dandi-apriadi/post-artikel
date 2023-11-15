@@ -19,11 +19,6 @@ class KaryawanModel extends CI_Model{
     public $column_search = array('user.firstname', 'user.lastname', 'user.email', 'karyawan.nama_karyawan', 'karyawan.no_hp', 'karyawan.status_karyawan');
     public $order = array('user.id' => 'desc');
 
-
-    public function index(){
-        
-    }
-
     public function add($data = array()){
         return $this->db->insert($this->table, $data);
     }

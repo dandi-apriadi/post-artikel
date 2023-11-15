@@ -84,4 +84,8 @@ class OwnerModel extends CI_Model{
     public function update($data = array()){
         $this->db->update($this->table, $data);
     }
+
+    public function getById($id){
+        return $this->db->get_where($this->table, array('id' => $id))->row();
+    }
 }
