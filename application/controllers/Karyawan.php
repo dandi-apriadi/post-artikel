@@ -161,7 +161,7 @@ class Karyawan extends CI_Controller {
         if(isset($_POST['simpan'])){
 
             if(!empty($_POST['password'])) { // dengan password 
-                $password = $_POST['password'];
+				$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
             }else { // tidak dengan password
                 $password = $_POST['password_lama'];
             }
@@ -228,7 +228,7 @@ class Karyawan extends CI_Controller {
                 'lastname' => $this->input->post('lastName'),
                 'email' => $this->input->post('email'),
                 'password' => $password, 
-                'verified_email' => $this->input->post('statusKaryawan'),
+                'verified_email' => $this->input->post('status_aktif'),
                 'role' => 'karyawan' 
             );
 
@@ -236,7 +236,7 @@ class Karyawan extends CI_Controller {
                 'userId' => $id,
                 'nama_karyawan' => $this->input->post('firstName') . $this->input->post('lastName'),
                 'status_karyawan' => $this->input->post('jabatan'),
-                'no_hp' => $this->input->post('phoneNumber')
+                'no_hp' => $this->input->post('phone')
             );
 
             $this->KaryawanModel->updateKaryawan($dataKaryawan);
