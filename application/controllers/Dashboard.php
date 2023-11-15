@@ -5,7 +5,7 @@ class Dashboard extends CI_Controller {
 
 	public function __construct(){
 		parent::__construct();
-		$this->load->model(['AuthModel', 'UserModel','KaryawanModel']);
+		$this->load->model(['AuthModel', 'UserModel','KaryawanModel', 'OwnerModel', 'NotaModel']);
 
 		// jika belum login, tdk bisa kesini
 		if (!isset($_SESSION['logged_in'])) {
@@ -16,20 +16,34 @@ class Dashboard extends CI_Controller {
 	public function index(){
 		$data['title'] = "Dashboard BaDag";
 		$data['getUser'] = $this->AuthModel->getDataLoggedIn($_SESSION['id_user']);
-		$data['getKaryawan'] = $this->KaryawanModel->getById($_SESSION['id_user']);
+		
 
 		$this->load->view('templates/dashboard/head', $data);
 		$this->load->view('templates/dashboard/navbar', $data);
 
-		if ($data['getUser']->role == 'admin') {
+		if ($data['getUser']->role == 'admin') { // jika admin
+
 			$data['sidebar'] = $this->load->view('templates/dashboard/sidebarAdmin', $data, true);
 			$this->load->view('pages/dashboard/admin', $data);
-		}else if ($data['getUser']->role == 'karyawan') {
+			
+		}else if ($data['getUser']->role == 'karyawan') { // jika karyawan
+
+			$data['getKaryawan'] = $this->KaryawanModel->getById($_SESSION['id_user']);
+			$data['getOwner'] = $this->OwnerModel->getById($data['getKaryawan']->ownerId);
+
+			// status service
+			$data['serviceProses'] = $this->NotaModel->countServiceByStatus('proses', $data['getKaryawan']->id);
+			$data['serviceBatal'] = $this->NotaModel->countServiceByStatus('batal', $data['getKaryawan']->id);
+			$data['serviceSelesai'] = $this->NotaModel->countServiceByStatus('selesai', $data['getKaryawan']->id);
+
 			$data['sidebar'] = $this->load->view('templates/dashboard/sidebarKaryawan', $data, true);
 			$this->load->view('pages/dashboard/karyawan', $data);
-		}else if ($data['getUser']->role == 'owner') {
+
+		}else if ($data['getUser']->role == 'owner') { // jika owner
+
 			$data['sidebar'] = $this->load->view('templates/dashboard/sidebarOwner', $data, true);
 			$this->load->view('pages/dashboard/owner', $data);
+
 		}
 
 		$this->load->view('templates/dashboard/footer');

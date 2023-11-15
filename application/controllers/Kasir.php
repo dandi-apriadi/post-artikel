@@ -45,4 +45,5 @@ class Kasir extends CI_Controller {
 		
 		";
     }
+
 }

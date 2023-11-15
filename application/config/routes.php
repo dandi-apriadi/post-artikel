@@ -35,3 +35,7 @@ $route['kasir/add'] = 'Kasir/tambah';
 // Teknisi
 $route['nota/add'] = 'Nota/add';
 $route['nota/list'] = 'Nota/list';
+$route['nota/detail/(:num)'] = 'Nota/detail/$1';
+
+// Profil
+$route['teknisi/profil'] = 'Profil/teknisi';

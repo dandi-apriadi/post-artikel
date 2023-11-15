@@ -25,9 +25,16 @@ if (isset($message)) {
                   <h3>Data Nota</h3>
                   <div>Dibawah ini adalah data nota yang pernah dibuat</div><hr/>
 
+                  <div class="alert alert-primary">
+                    <h5>Info</h5>
+                    <div>- Tanda centang hijau (<font color="green"><i class="fas fa-check"></i></font>) disebelah kiri berarti service telah selesai</div>
+                    <div>- Tanda silang merah (<font color="red"><i class="fas fa-times"></i></font>) disebelah kiri berarti service dibatalkan</div>
+                  </div>
+
                   <table id="table" class="table text-center table-bordered table-striped">
                     <thead>
                       <tr>
+                        <th></th>
                         <th>No</th>
                         <th>Tgl Masuk</th>
                         <th>Tgl Pengambilan</th>
