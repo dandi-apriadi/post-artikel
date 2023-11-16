@@ -294,7 +294,6 @@ if (isset($message)) {
                         console.error('Error:', error);
                     }
                 });
-
         }
 
         function increment(index){
