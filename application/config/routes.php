@@ -39,3 +39,4 @@ $route['nota/detail/(:num)'] = 'Nota/detail/$1';
 
 // Profil
 $route['teknisi/profil'] = 'Profil/teknisi';
+$route['owner/profil'] = 'Profil/owner';
