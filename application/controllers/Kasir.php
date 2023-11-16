@@ -34,19 +34,43 @@ class Kasir extends CI_Controller {
 		$this->load->view('templates/dashboard/footer');
 
         if(isset($_POST['finish'])){
-            $this->KasirModel->transferCacheToDetail();
-            $this->session->set_flashdata('msg_sweetalert', '<script>Swal.fire({
-				title: "Berhasil",
-				text: "Pesanan Berhasil diBuat",
-				icon: "success",})</script>'
-			);
-            redirect('/kasir/add');
+            $validasi = $this->KasirModel->validasiJumlahBarang();
+
+            if($validasi == true){
+               $jumlahBayar = $this->input->post('jumlahBayar');
+               if (!empty($jumlahBayar)) {
+                    $noTransaksi = $this->input->post('notransaksi');
+                    $this->KasirModel->kurangiJumlahBarang();
+                    $this->KasirModel->transferCacheToDetail();
+                    $this->session->set_flashdata('msg_sweetalert', '<script>Swal.fire({
+                        title: "Berhasil",
+                        text: "Pesanan Berhasil diBuat",
+                        icon: "success",})</script>'
+                    );
+                    redirect('/kasir/detail-transaksi/'.$noTransaksi);
+                }else{
+                    $this->session->set_flashdata('msg_sweetalert', '<script>Swal.fire({
+                        title: "Gagal",
+                        text: "Mohon Masukkan Jumlah Pembayaran",
+                        icon: "error",})</script>'
+                    );
+                redirect('/kasir/add');
+                }
+            }elseif($validasi == false){
+                $this->session->set_flashdata('msg_sweetalert', '<script>Swal.fire({
+				title: "Gagal Melakukan Transaksi",
+				text: "Salah Satu Stok Produk Anda Tidak Cukup",
+				icon: "error",})</script>'
+                );
+                redirect('/kasir/add');
+            }
+            
         }
     }
 
     public function saveTransaction(){
         $dataTransaksi = array(
-            'no_transaksi' => '#'.rand()."-".time(),
+            'no_transaksi' => rand()."-".time(),
             'userId' => $_SESSION['id_user'],
             'metode_pembayaran' => $_POST['jenisPembayaran'],
             'uang_pelanggan' => $_POST['uangPelanggan'],
@@ -103,6 +127,8 @@ class Kasir extends CI_Controller {
             $totalBiaya = $totalBiaya + $totalharga;
 
             $row = array(
+                'id' => $detail->id,
+                'userId' => $detail->userId,
                 'nama_barang' => $detail->nama_barang,
                 'jumlah_barang' => $detail->jumlah_barang,
                 'harga' => $harga,
@@ -125,5 +151,32 @@ class Kasir extends CI_Controller {
 	    //output to json format
         echo json_encode($output);
     }
+
+    public function deleteCache($id){
+        $this->KasirModel->deleteCache($id);
+        redirect('/kasir/add');
+    }
+
+    public function detailTransaksi($id){
+        $data['title'] = "Detail Transaksi";
+		$data['getUser'] = $this->AuthModel->getDataLoggedIn($_SESSION['id_user']);
+		$data['getKaryawan'] = $this->KaryawanModel->getById($_SESSION['id_user']);
+        $data['detail'] = $this->KasirModel->getDetailTransaction($id);
+        $data['transaksi'] = $this->KasirModel->getTransaction($id);
+
+		$dataKaryawan = $this->KaryawanModel->getById($_SESSION['id_user']);
+		// jika bukan admin yg login, maka tdk bisa kesini
+		if ($data['getUser']->role != 'karyawan')
+			redirect('dashboard');
+
+		$this->load->view('templates/dashboard/head', $data);
+		$this->load->view('templates/dashboard/navbar', $data);
+
+		$data['sidebar'] = $this->load->view('templates/dashboard/sidebarKaryawan', $data, true);
+		$this->load->view('pages/transaksi/detailtransaksi', $data);
+
+		$this->load->view('templates/dashboard/footer');
+    }
+
 
 }

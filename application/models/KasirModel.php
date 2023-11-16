@@ -120,6 +120,18 @@ class KasirModel extends CI_Model{
         return $query;
     }
 
+    public function getDetailTransaction($id) {
+        $this->db->where('no_transaksi',$id);
+        $query = $this->db->get('detail_transaksi');
+        return $query;
+    }
+
+    public function getTransaction($id) {
+        $this->db->where('no_transaksi',$id);
+        $query = $this->db->get('transaksi');
+        return $query->row();
+    }
+
     public function updateTransaksi($dataTransaksi) {
         // Contoh: Update transaksi berdasarkan ID transaksi
         $this->db->where('userId', $dataTransaksi['userId']);
@@ -140,6 +152,57 @@ class KasirModel extends CI_Model{
             // Return nilai default jika tidak ada hasil
             return 0;
         }
+    }
+
+    public function validasiJumlahBarang() {
+        // Ambil data jumlah barang dari cache_transaksi
+        $cacheBarang = $this->db->select('barangId, jumlah_barang')->get('cache_transaksi')->result_array();
+
+        // Inisialisasi array untuk menyimpan jumlah barang dari tabel barang
+        $barangJumlah = array();
+
+        // Ambil data jumlah barang dari tabel barang
+        $barang = $this->db->select('id, stok')->get('barang')->result_array();
+
+        // Ubah format data barang untuk kemudahan pencarian
+        foreach ($barang as $row) {
+            $barangJumlah[$row['id']] = $row['stok'];
+        }
+
+        // Periksa apakah jumlah barang dari cache_transaksi lebih besar atau sama dengan jumlah barang dari tabel barang
+        foreach ($cacheBarang as $row) {
+            $barangId = $row['barangId'];
+            $jumlahCache = $row['jumlah_barang'];
+
+            if (!isset($barangJumlah[$barangId]) || $jumlahCache > $barangJumlah[$barangId]) {
+                // Jika jumlah barang dari cache_transaksi lebih besar dari tabel barang, kembalikan false
+                return false;
+            }
+        }
+
+        // Jika semua jumlah barang dari cache_transaksi lebih kecil atau sama dengan tabel barang, kembalikan true
+        return true;
+    }
+
+    public function kurangiJumlahBarang() {
+        // Ambil data jumlah barang dari cache_transaksi
+        $this->db->where('userId', $_SESSION['id_user']);
+        $cacheBarang = $this->db->select('barangId, jumlah_barang')->get('cache_transaksi')->result_array();
+
+        foreach ($cacheBarang as $row) {
+            $barangId = $row['barangId'];
+            $jumlahCache = $row['jumlah_barang'];
+
+            // Kurangi jumlah barang di tabel 'barang' berdasarkan jumlah di cache_transaksi
+            $this->db->set('stok', 'stok - ' . $jumlahCache, false);
+            $this->db->where('id', $barangId);
+            $this->db->update('barang');
+        }
+    }
+    
+    public function deleteCache($id) {
+        $this->db->where('id', $id);
+        $this->db->delete('cache_transaksi');
     }
 
 }
