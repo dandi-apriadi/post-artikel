@@ -31,6 +31,8 @@ $route['owner/list'] = 'Owner/list';
 
 //kasir
 $route['kasir/add'] = 'Kasir/tambah';
+$route['kasir/delete-cache/(:num)'] = 'Kasir/deleteCache/$1';
+$route['kasir/detail-transaksi/(:any)'] = 'Kasir/detailTransaksi/$1';
 
 // Teknisi
 $route['nota/add'] = 'Nota/add';

@@ -83,6 +83,9 @@ if (isset($message)) {
                     <div class="payment-input">
                             <div class="card">
                                 <div class="card-body card-payment">
+                                <form action="" method="post">
+                                <input type="text" id="no-transaksi" class="d-none" name="notransaksi">
+
                                     <div class="row">
                                         <div class="col-md-6">
                                             <label for="jenisPembayaran">Jenis Pembayaran:</label>
@@ -103,13 +106,12 @@ if (isset($message)) {
 
                                         <div class="col-md-6 mt-2 text-right">
 
-                                            <form action="" method="post">
                                             <button onclick="SaveStruct();" type="button" class="btn btn-primary">Simpan</button>
 
                                             <input name="finish" type="submit" class="btn btn-success" value="Selesai">
-                                            </form>
                                         </div>
                                     </div>
+                                    </form>
 
                                 </div>
                             </div>
@@ -140,7 +142,7 @@ if (isset($message)) {
                                         <div class="card px-2 py-1">
                                             <div class="product-card">
                                                 <img class="product-image" style="height:250px;" src="<?=base_url('assets/images/barang/'.$item->gambar)?>" alt="<?=$item->nama_barang?>">
-                                                <h4><?=$item->nama_barang?></h4>
+                                                <h4 class="mt-2"><?=$item->nama_barang?></h4>
                                                 <p>Harga: Rp. <?=number_format($item->harga, 0, '.', ',');?></p>
                                                 <p>Stok Tersisa: <span id="stok-tersisa-<?=$index?>"><?=$item->stok?></span></p>
                                                 <div class="input-group">
@@ -153,7 +155,7 @@ if (isset($message)) {
                                                     </div>
                                                 </div>
                                                 <div class="row justify-content-center">
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-4 mt-2 mb-2">
                                                         <button onclick="button(<?=$index?>);" id="button-<?=$index?>" class="btn btn-primary btn-block mt-1">Tambah</button>
                                                     </div>
                                                 </div>
@@ -211,6 +213,7 @@ if (isset($message)) {
                                             <th>Jumlah</th>
                                             <th>Harga</th>
                                             <th>Subtotal</th>
+                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody id="detailbarang">
@@ -221,6 +224,7 @@ if (isset($message)) {
                                             <td>x<?=$item->jumlah_barang?></td>
                                             <td>Rp.<?=number_format($item->harga_satuan, 0, '.', ',');?></td>
                                             <td>Rp.<?=number_format($item->harga_satuan * $item->jumlah_barang, 0, '.', ',');?></td>
+                                            <td><a href="<?php echo base_url('kasir/delete-cache/'.$item->id); ?>" style="color:black"><i class="fas fa-trash"></i></a></td>
                                             <?php 
                                             $subTotal = $item->harga_satuan * $item->jumlah_barang;
                                             $biaya = $biaya + $subTotal;      
@@ -248,9 +252,6 @@ if (isset($message)) {
                                 <div class="detail-item">
                                     Rekening: BCA 0262026190 Irtan Sutan Montolalu
                                 </div>
-                                
-                                <div id="kembalian">20000</div>
-
                             </div>
                         </div>
                     </div>
@@ -287,6 +288,7 @@ if (isset($message)) {
                     $("#uang-kembalian").html(`Kembalian: Rp.${response.uangKembalian}`);
                     $("#no-struk").html(`: ${response.noTransaksi}`);
                     $("#jenis-pembayaran").html(`: ${response.jenisPembayaran}`);
+                    document.getElementById("no-transaksi").value=`${response.noTransaksi}`;
                     },
                     error: function(error) {
                         console.error('Error:', error);
@@ -359,6 +361,7 @@ if (isset($message)) {
                                         <td>x${item.jumlah_barang}</td>
                                         <td>Rp.${item.harga}</td>
                                         <td>Rp.${item.sub_total}</td>
+                                        <td><a href="<?php echo base_url('kasir/delete-cache/')?>${item.id}" style="color:black"><i class="fas fa-trash"></i></a></td>
                                     </tr>
                                     `
                                 );
@@ -371,19 +374,5 @@ if (isset($message)) {
                     }
                 });
             }
-          
-            $.ajax({
-                url: "<?php echo base_url('Kasir/execute_action'); ?>",
-                type: "POST",
-                data: {
-                    namaBarang: namaBarang,
-                    harga: harga,
-                    jumlah: currentQuantity,
-                    // barangId: 
-                },
-                success: function(response) {
-                    $("#detailbarang").html(response);
-                }
-            });
         }
     </script>
