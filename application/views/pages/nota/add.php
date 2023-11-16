@@ -111,7 +111,7 @@ if (isset($message)) {
 									</div>
 									<div class="form-group">
 										<label for="kerusakkan">Kerusakkan</label>
-										<textarea name="kerusakkan" id="kerusakkan" class="form-control" rows="10" placeholder="Masukkan Kerusakkan"><?= set_value('kerusakkan') ?></textarea>
+										<textarea name="kerusakkan" id="kerusakkan" class="form-control" rows="3" placeholder="Masukkan Kerusakkan"><?= set_value('kerusakkan') ?></textarea>
 										<?php echo form_error('kerusakkan', '<small class="text-muted"><font color="red">', '</font></small>'); ?>
 									</div><hr/>
 									<div class="row">

@@ -31,6 +31,31 @@ class Profil extends CI_Controller {
 		if ($data['getKaryawan']->status_karyawan != 'teknisi')
 			redirect('dashboard');
 
+		// jika tombol upload foto di klik
+		if(isset($_POST['uploadFoto'])){
+			$config['upload_path']   = 'assets/images/profile/';
+			$config['allowed_types'] = 'jpg|png';
+			$config['max_size']      = 3000000; // 3mb
+			$config['file_name']	 = time().'_'.rand(); // random filename
+			$this->load->library('upload', $config);
+
+			$this->upload->do_upload('fotoProfil');
+			$foto = $this->upload->data();
+
+			$this->KaryawanModel->updateKaryawan(array(
+				'userId' => $_SESSION['id_user'],
+				'photo_karyawan' => $foto['file_name'],
+			));
+
+			$this->session->set_flashdata('msg_sweetalert', '<script>Swal.fire({
+				title: "",
+				text: "Foto berhasil di upload",
+				icon: "success",})</script>'
+			);
+
+            redirect('teknisi/profil');
+		}
+
 		$this->load->view('templates/dashboard/head', $data);
 		$this->load->view('templates/dashboard/navbar', $data);
 

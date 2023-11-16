@@ -36,6 +36,8 @@ if (isset($message)) {
 
 								<?php } ?>
 
+								<center><a href="#modalUploadFoto" data-toggle="modal" class="btn btn-primary btn-sm mt-2">Upload Foto</a></center><hr>
+
 								<h3 class="mt-3" align="center"><?= $getUser->firstname.' '.$getUser->lastname ?></h3>
 								<h5 align="center"><?= ucwords($getKaryawan->status_karyawan) ?></h5><hr>
 
@@ -60,4 +62,30 @@ if (isset($message)) {
 	    	</div>
 	    </section>
 	</div>
+</div>
+
+<!-- Modal Keluar -->
+<div class="modal fade" id="modalUploadFoto" data-backdrop="static">
+  <div class="modal-dialog">
+    <form action="" method="post" enctype="multipart/form-data">
+    <div class="modal-content">
+      <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Upload Foto</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="fotoProfil" name="fotoProfil" onchange="previewFile('fotoProfil', 'label_fotoProfil')" required accept="image/*">
+                <label class="custom-file-label" id="label_fotoProfil">Pilih Foto</label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" name="uploadFoto" class="btn btn-primary btn-sm">Simpan</button>
+            <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Keluar</button>
+        </div>
+        </div>
+    </form>
+  </div>
 </div>
