@@ -52,6 +52,7 @@ class Dashboard extends CI_Controller {
 	public function change_pass(){
 		$data['title'] = "Ganti Password";
 		$data['getUser'] = $this->AuthModel->getDataLoggedIn($_SESSION['id_user']);
+		$data['getKaryawan'] = $this->KaryawanModel->getById($_SESSION['id_user']);
 
 		$this->form_validation->set_rules('pass_old', '', 'required', array(
 			'required' => 'password lama tidak boleh kosong',
