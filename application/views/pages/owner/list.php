@@ -26,17 +26,17 @@ if (isset($message)) {
 		    			<div>Data Owner Toko Yang Telah Mendaftar</div><hr/>
 
 		    			<table id="table" class="table table-bordered table-striped">
-								<thead>
-									<tr>
-										<th>No</th>
-										<th>Nama Owner</th>
-										<th>Email Owner</th>
-										<th>Nama Toko</th>
-										<th>Opsi</th>
-									</tr>
-								</thead>
-								<tbody id="showdata"></tbody>
-							</table>
+							<thead>
+								<tr>
+									<th>No</th>
+									<th>Nama Owner</th>
+									<th>Email Owner</th>
+									<th>Nama Toko</th>
+									<th>Opsi</th>
+								</tr>
+							</thead>
+							<tbody id="showdata"></tbody>
+						</table>
 		    		</div>
 		    	</div>
 
