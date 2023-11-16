@@ -59,7 +59,7 @@ class Nota extends CI_Controller {
 			$alamat = htmlspecialchars($this->input->post('alamat'));
 			$tipeHp = htmlspecialchars($this->input->post('tipeHp'));
 			$imei = htmlspecialchars($this->input->post('imei'));
-			$kerusakan = htmlspecialchars($this->input->post('kerusakan'));
+			$kerusakan = nl2br($this->input->post('kerusakan'));
 			$hargaService = htmlspecialchars($this->input->post('hargaService'));
 			$uangPanjar = htmlspecialchars($this->input->post('uangPanjar'));
 			$perbaikan = htmlspecialchars($this->input->post('perbaikan'));

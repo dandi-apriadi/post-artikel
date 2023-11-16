@@ -80,15 +80,15 @@ if (isset($message)) {
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-												<label for="kerusakan">Kerusakan</label>
-												<input type="text" class="form-control" name="kerusakan" id="kerusakan" value="<?= set_value('kerusakan') ?>" placeholder="Masukkan Nomor HP atau WA">
-												<?php echo form_error('kerusakan', '<small class="text-muted"><font color="red">', '</font></small>'); ?>
+												<label for="keterangan">Keterangan</label>
+												<input type="text" class="form-control" id="keterangan" name="keterangan"  value="<?= set_value('keterangan') ?>" placeholder="Masukkan Keterangan">
+												<?php echo form_error('keterangan', '<small class="text-muted"><font color="red">', '</font></small>'); ?>
 											</div>
 										</div>
 										<div class="col-md-6">
 											<div class="form-group">
 												<label for="hargaService">Harga Service</label>
-												<input type="number" class="form-control" name="hargaService" id="hargaService" value="<?= set_value('hargaService') ?>" placeholder="Masukkan Nama Customer">
+												<input type="number" class="form-control" name="hargaService" id="hargaService" value="<?= set_value('hargaService') ?>" placeholder="Masukkan Harga Service">
 												<?php echo form_error('hargaService', '<small class="text-muted"><font color="red">', '</font></small>'); ?>
 											</div>
 										</div>
@@ -110,9 +110,9 @@ if (isset($message)) {
 										</div>
 									</div>
 									<div class="form-group">
-										<label for="keterangan">Keterangan</label>
-										<input type="text" class="form-control" name="keterangan" id="keterangan" value="<?= set_value('keterangan') ?>" placeholder="Keterangan">
-										<?php echo form_error('keterangan', '<small class="text-muted"><font color="red">', '</font></small>'); ?>
+										<label for="kerusakkan">Kerusakkan</label>
+										<textarea name="kerusakkan" id="kerusakkan" class="form-control" rows="10" placeholder="Masukkan Kerusakkan"><?= set_value('kerusakkan') ?></textarea>
+										<?php echo form_error('kerusakkan', '<small class="text-muted"><font color="red">', '</font></small>'); ?>
 									</div><hr/>
 									<div class="row">
 										<div class="col-md-3">

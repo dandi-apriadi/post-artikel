@@ -46,7 +46,7 @@ if (isset($message)) {
                             
                         </div>
                         <div class="col-md-6 col-6">
-                            <h5>Service Handphone, Computer, Laptop & TV</h5>
+                            <h5><?= $getOwner->tipe_toko ?></h5>
                             <h5><?= $getOwner->no_hp ?></h5>
                             <h6><?= $getOwner->alamat_toko ?></h6>
                         </div>
