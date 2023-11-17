@@ -113,6 +113,12 @@ class KasirModel extends CI_Model{
         }
     }
     
+    public function getBarang($id) {
+        $this->db->where('userId',$id);
+        $this->db->limit(3);
+        $query = $this->db->get('barang');
+        return $query;
+    }
 
     public function getcache() {
         $this->db->where('userId',$_SESSION['id_user']);
@@ -203,6 +209,20 @@ class KasirModel extends CI_Model{
     public function deleteCache($id) {
         $this->db->where('id', $id);
         $this->db->delete('cache_transaksi');
+    }
+
+    public function searchBarang($key, $kode_owner) {
+
+        $this->db->like('nama_barang', $key);
+        $this->db->or_like('deskripsi', $key);
+        $this->db->or_like('stok', $key);
+        $this->db->or_like('harga', $key);
+        $this->db->where('userId', $kode_owner);
+
+        $query = $this->db->get('barang');
+
+        return $query;
+
     }
 
 }

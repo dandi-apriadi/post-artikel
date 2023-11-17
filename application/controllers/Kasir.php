@@ -19,7 +19,7 @@ class Kasir extends CI_Controller {
 		$data['getKaryawan'] = $this->KaryawanModel->getById($_SESSION['id_user']);
         $data['getStruk'] = $this->KasirModel->getTransactions();
 		$dataKaryawan = $this->KaryawanModel->getById($_SESSION['id_user']);
-        $data['barang'] = $this->BarangModel->getBarang($dataKaryawan->ownerId);
+        $data['barang'] = $this->KasirModel->getBarang($dataKaryawan->ownerId);
         $data['cache'] = $this->KasirModel->getcache();
 		// jika bukan admin yg login, maka tdk bisa kesini
 		if ($data['getUser']->role != 'karyawan')
@@ -154,6 +154,18 @@ class Kasir extends CI_Controller {
 
     public function deleteCache($id){
         $this->KasirModel->deleteCache($id);
+        $list = $this->KasirModel->getcache();
+        $totalBiaya = 0;
+        foreach($list->result() as $detail){
+            $totalharga = $detail->harga_satuan * $detail->jumlah_barang;
+            $totalBiaya = $totalBiaya + $totalharga;
+		}
+        $data = array(
+          'total_biaya' => $totalBiaya,
+          'userId' => $_SESSION['id_user'],
+          'status' => 'draft'
+        );
+        $this->KasirModel->updateTransaksi($data);
         redirect('/kasir/add');
     }
 
@@ -176,6 +188,39 @@ class Kasir extends CI_Controller {
 		$this->load->view('pages/transaksi/detailtransaksi', $data);
 
 		$this->load->view('templates/dashboard/footer');
+    }
+
+    public function searchItem($id){
+        $key = $id;
+        $dataKaryawan = $this->KaryawanModel->getById($_SESSION['id_user']);
+        $list = $this->KasirModel->searchBarang($key,$dataKaryawan->ownerId);
+
+		$data = array();
+        $totalBiaya = 0;
+        foreach($list->result() as $detail){
+            if($detail->userId != $dataKaryawan->ownerId){
+                continue;
+            }
+            $harga = number_format($detail->harga, 0, '.', ',');
+            $gambar = base_url('assets/images/barang/'.$detail->gambar);
+			$row = array();
+            $row = array(
+                'nama_barang' => $detail->nama_barang,
+                'gambar' => $gambar,
+                'stok' => $detail->stok,
+                'harga' => $harga,
+                'hargasistem' => $detail->harga,
+                'id' => $detail->id,
+                'deskripsi' => $detail->deskripsi
+            );
+
+            $data[] = $row;
+		}
+        
+        $output = array(
+	        "data" => $data
+	    );
+        echo json_encode($output);
     }
 
 

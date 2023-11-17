@@ -118,14 +118,14 @@ if (isset($message)) {
                         </div>
                         <div class="col-lg-6 mt-2">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Cari...">
+                                <input id="Search" type="text" class="form-control" placeholder="Cari...">
                                 <div class="input-group-append">
                                     <button class="btn btn-primary" type="button">Cari</button>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body">
-                        <div class="row">
+                        <div class="row" id="list-item">
                         <?php 
                         $index =0;
                         ?>
@@ -261,6 +261,73 @@ if (isset($message)) {
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+    var search = document.getElementById("Search");
+    search.addEventListener('keyup', function () {
+        $.ajax({
+                url: "<?php echo base_url('Kasir/searchItem/'); ?>"+search.value,
+                type: "GET",
+                dataType: 'json',
+                data: {},
+                success: function(response) {
+                    // alert("berhasil Data yang diambil : "+response.data)
+                    $("#list-item").empty();
+                    $.each(response.data, function(index, item) {
+                        index++;
+
+                        // <div class="">
+                        //         <h2>${index}</h2>
+                        //         <h2>${item.nama_barang}</h2>
+                        //         <h2>${item.stok}</h2>
+                        //         <h2>${item.gambar}</h2>
+                        //         <h2>${item.deskripsi}</h2>
+
+                        //     </div>
+
+                        // Tambahkan baris HTML untuk setiap elemen
+                        $("#list-item").append(
+                            `
+                            <div class="d-none">
+                                <input type="text" value="${item.nama_barang}" id="namaBarang-${index}">
+                                <input type="text" value="${item.hargasistem}" id="harga-${index}">
+                                <input type="text" value="${item.id}" id="barangId-${index}">
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="card px-2 py-1">
+                                    <div class="product-card">
+                                        <img class="product-image" style="height:250px;" src="${item.gambar}" alt="${item.nama_barang}">
+                                        <h4 class="mt-2">${item.nama_barang}</h4>
+                                        <p>Harga: Rp. ${item.harga}</p>
+                                        <p>Stok Tersisa: <span id="stok-tersisa-${index}">${item.stok}</span></p>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <button onclick="decrement(${index});" id="decrement-${index}" class="btn btn-outline-secondary" type="button">-</button>
+                                            </div>
+                                            <input id="quantity-${index}" type="number" readonly class="form-control text-center" value="1">
+                                            <div class="input-group-append">
+                                                <button onclick="increment(${index});" id="increment-${index}" class="btn btn-outline-secondary" type="button">+</button>
+                                            </div>
+                                        </div>
+                                        <div class="row justify-content-center">
+                                            <div class="col-md-4 mt-2 mb-2">
+                                                <button onclick="button(${index});" id="button-${index}" class="btn btn-primary btn-block mt-1">Tambah</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            `
+                        );
+                    });
+                    
+                    },
+                    error: function(error) {
+                        console.error('Error:', error);
+                    }
+            });
+        });
+  
 
         function SaveStruct(){
             var jenisPembayaran = document.getElementById("jenisPembayaran").value;
@@ -273,27 +340,25 @@ if (isset($message)) {
                     uangPelanggan: uangPelanggan
                 },
                 success: function(response) {
-                }
-            });
-
-            
-            $.ajax({
-                url: "<?php echo base_url('Kasir/getDataTransaction'); ?>",
-                type: "GET",
-                dataType: 'json',
-                data: {},
-                success: function(response) {
-                    $("#waktu-transaksi").html(`: ${response.waktuTransaksi}`);
-                    $("#uang-pelanggan").html(`Bayar/Uang Pelanggan: Rp.${response.uangPelanggan}`);
-                    $("#uang-kembalian").html(`Kembalian: Rp.${response.uangKembalian}`);
-                    $("#no-struk").html(`: ${response.noTransaksi}`);
-                    $("#jenis-pembayaran").html(`: ${response.jenisPembayaran}`);
-                    document.getElementById("no-transaksi").value=`${response.noTransaksi}`;
-                    },
-                    error: function(error) {
-                        console.error('Error:', error);
+                    $.ajax({
+                        url: "<?php echo base_url('Kasir/getDataTransaction'); ?>",
+                        type: "GET",
+                        dataType: 'json',
+                        data: {},
+                        success: function(response) {
+                            $("#waktu-transaksi").html(`: ${response.waktuTransaksi}`);
+                            $("#uang-pelanggan").html(`Bayar/Uang Pelanggan: Rp.${response.uangPelanggan}`);
+                            $("#uang-kembalian").html(`Kembalian: Rp.${response.uangKembalian}`);
+                            $("#no-struk").html(`: ${response.noTransaksi}`);
+                            $("#jenis-pembayaran").html(`: ${response.jenisPembayaran}`);
+                            document.getElementById("no-transaksi").value=`${response.noTransaksi}`;
+                            },
+                            error: function(error) {
+                                console.error('Error:', error);
+                            }
+                        });
                     }
-                });
+            });
         }
 
         function increment(index){
