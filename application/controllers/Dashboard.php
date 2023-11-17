@@ -14,6 +14,7 @@ class Dashboard extends CI_Controller {
 	}
 
 	public function index(){
+        $_SESSION['index1'] = 1;
 		$data['title'] = "Dashboard BaDag";
 		$data['getUser'] = $this->AuthModel->getDataLoggedIn($_SESSION['id_user']);
 		

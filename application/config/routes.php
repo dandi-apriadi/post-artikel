@@ -23,7 +23,9 @@ $route['karyawan/deletedata/(:num)'] = 'Karyawan/deleteData/$1';
 
 //barang
 $route['barang/daftar-barang'] = 'Barang';
+$route['barang/add'] = 'Barang/add';
 $route['barang/tambah-barang'] = 'Barang/tambah';
+$route['barang/edit-barang'] = 'Barang/edit';
 $route['barang/detail/(:num)'] = 'Barang/detail/$1';
 $route['barang/search/(:any)'] = 'Barang/searchItem/$1';
 

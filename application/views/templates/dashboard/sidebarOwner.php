@@ -40,9 +40,13 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
+              <a href="<?= base_url('barang/add') ?>" class="nav-link">
+              <i class="fas fa-solid fa-qrcode nav-icon"></i>
+                <p>Tambah Barang</p>
+              </a>
               <a href="<?= base_url('barang/tambah-barang') ?>" class="nav-link">
                 <i class="fas fa-plus-square nav-icon"></i>
-                <p>Tambah Barang</p>
+                <p>Tambah Barang Manual</p>
               </a>
               <a href="<?= base_url('barang/daftar-barang') ?>" class="nav-link">
               <i class="fas fa-cube nav-icon"></i>
