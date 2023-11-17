@@ -31,7 +31,7 @@ class Barang extends CI_Controller {
 	}
 
     public function add(){
-        $data['title'] = "QR/Bar Code";
+        $data['title'] = "Tambah Barang";
 		$data['getUser'] = $this->AuthModel->getDataLoggedIn($_SESSION['id_user']);
 
 		// jika bukan admin yg login, maka tdk bisa kesini
@@ -48,29 +48,74 @@ class Barang extends CI_Controller {
 
         if(isset($_POST['checkProduct'])){
             $kode = $this->input->post('barcodeInput');
+            if (strpos($kode, '(') !== false || strpos($kode, ')') !== false) {
+                redirect('barang/add');
+            }
 		    $_SESSION['barcode'] = $kode;
             $isRegistered = $this->BarangModel->isIdRegistered($kode);
-
             if ($isRegistered) {
-                
-                if($_SESSION['index1'] == 1){
-                    $_SESSION['index1'] = 2;
-                }elseif($_SESSION['index1'] == 2){
-                    $this->BarangModel->tambahStok($_SESSION['barcode']);
-                    $_SESSION['index1'] = 1;
-                }
-                
+                $this->cekDanJalankanAksi($kode);
                 $data['barang'] = $this->BarangModel->getbyId($kode);
 		        $data['display'] = $this->load->view('templates/barang/detail', $data, true);
             } else {
                 $data['display'] = $this->load->view('templates/barang/add', $data, true);
             }
         }
-
 		$this->load->view('pages/barang/qr', $data);
-
     }
 
+    public function Create(){
+        $data['title'] = "Buat atau Edit Barang";
+		$data['getUser'] = $this->AuthModel->getDataLoggedIn($_SESSION['id_user']);
+
+		// jika bukan admin yg login, maka tdk bisa kesini
+		if ($data['getUser']->role != 'owner')
+			redirect('dashboard');
+
+		$this->load->view('templates/dashboard/head', $data);
+		$this->load->view('templates/dashboard/navbar', $data);
+
+		$data['sidebar'] = $this->load->view('templates/dashboard/sidebarOwner', $data, true);
+        $data['display'] = $this->load->view('templates/barang/defaultcreate', $data, true);
+
+		$this->load->view('templates/dashboard/footer');
+
+        if(isset($_POST['checkProduct'])){
+            $kode = $this->input->post('barcodeInput');
+            if (strpos($kode, '(') !== false || strpos($kode, ')') !== false) {
+                redirect('barang/create');
+            }
+		    $_SESSION['barcode'] = $kode;
+            $isRegistered = $this->BarangModel->isIdRegistered($kode);
+            if ($isRegistered) {
+                $data['barang'] = $this->BarangModel->getbyId($kode);
+		        $data['display'] = $this->load->view('templates/barang/detail', $data, true);
+            } else {
+                $data['display'] = $this->load->view('templates/barang/add', $data, true);
+            }
+        }
+		$this->load->view('pages/barang/qr', $data);
+    }
+
+    public function cekDanJalankanAksi($produkId) {
+        if (!isset($_SESSION['produk_counter'])) {
+            $_SESSION['produk_counter'] = array();
+        }
+        // Mengecek apakah produkId sudah ada dalam array
+        if (isset($_SESSION['produk_counter'][$produkId])) {
+            // Produk telah diperiksa sebanyak dua kali
+            $_SESSION['produk_counter'][$produkId]++;
+            if ($_SESSION['produk_counter'][$produkId] === 2) {
+                // Menjalankan fungsi tertentu karena produk diperiksa dua kali
+                $this->BarangModel->tambahStok($_SESSION['barcode']);
+                $_SESSION['produk_counter'][$produkId] = 1;
+            }
+        } else {
+            // Produk baru diperiksa pertama kali
+            $_SESSION['produk_counter'][$produkId] = 1;
+        }
+    }
+    
     public function detail($id){
         $data['title'] = "Detail Barang";
 		$data['getUser'] = $this->AuthModel->getDataLoggedIn($_SESSION['id_user']);
