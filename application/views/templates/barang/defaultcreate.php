@@ -35,10 +35,10 @@
 
                         <div class="card instruction-card">
                             <div class="card-body">
-                                <h5 class="card-title">4. Jika sudah, sistem akan mengarahkan ke detail produk dan bisa dilakukan proses Penambahan Stok Produk</h5>
+                                <h5 class="card-title">4. Jika sudah, sistem akan mengarahkan ke detail produk dan bisa dilakukan proses edit produk</h5>
+                                <p class="card-text">Anda dapat melihat dan mengedit detail produk yang telah terdaftar.</p>
                             </div>
                         </div>
-                       
                     </div> 
                 </div>
             </div>
