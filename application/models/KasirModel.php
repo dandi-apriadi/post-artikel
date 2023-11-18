@@ -25,7 +25,6 @@ class KasirModel extends CI_Model{
             return 0;
         }
     }
-    
 
     public function transferCacheToDetail() {
         // Ambil data dari cache_transaksi berdasarkan userId
@@ -80,6 +79,7 @@ class KasirModel extends CI_Model{
         if ($existingTransaksi) {
             // Jika transaksi sudah ada, lakukan proses update
             $this->db->where('status', $dataTransaksi['status']);
+            $this->db->where('userId', $dataTransaksi['userId']);
             $this->db->update('transaksi', $dataTransaksi);
         } else {
             // Jika belum ada, lakukan proses insert
@@ -93,7 +93,7 @@ class KasirModel extends CI_Model{
         $existingTransaksi = $this->db->get_where('transaksi', array('userId' => $dataTransaksi['userId'], 'status' => 'draft'))->row();
     
         if ($existingTransaksi) {
-          
+           
         } else {
             // Jika belum ada, lakukan proses insert
             $this->db->insert('transaksi', $dataTransaksi);
@@ -119,6 +119,7 @@ class KasirModel extends CI_Model{
         $query = $this->db->get('barang');
         return $query;
     }
+    
 
     public function getcache() {
         $this->db->where('userId',$_SESSION['id_user']);
@@ -162,6 +163,7 @@ class KasirModel extends CI_Model{
 
     public function validasiJumlahBarang() {
         // Ambil data jumlah barang dari cache_transaksi
+        $this->db->where('userId', $_SESSION['id_user']);
         $cacheBarang = $this->db->select('barangId, jumlah_barang')->get('cache_transaksi')->result_array();
 
         // Inisialisasi array untuk menyimpan jumlah barang dari tabel barang
@@ -185,7 +187,6 @@ class KasirModel extends CI_Model{
                 return false;
             }
         }
-
         // Jika semua jumlah barang dari cache_transaksi lebih kecil atau sama dengan tabel barang, kembalikan true
         return true;
     }
@@ -198,7 +199,6 @@ class KasirModel extends CI_Model{
         foreach ($cacheBarang as $row) {
             $barangId = $row['barangId'];
             $jumlahCache = $row['jumlah_barang'];
-
             // Kurangi jumlah barang di tabel 'barang' berdasarkan jumlah di cache_transaksi
             $this->db->set('stok', 'stok - ' . $jumlahCache, false);
             $this->db->where('id', $barangId);
@@ -212,17 +212,14 @@ class KasirModel extends CI_Model{
     }
 
     public function searchBarang($key, $kode_owner) {
-
         $this->db->like('nama_barang', $key);
         $this->db->or_like('deskripsi', $key);
         $this->db->or_like('stok', $key);
+        $this->db->or_like('id', $key);
         $this->db->or_like('harga', $key);
         $this->db->where('userId', $kode_owner);
-
         $query = $this->db->get('barang');
-
         return $query;
-
     }
 
 }

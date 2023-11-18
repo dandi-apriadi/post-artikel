@@ -58,6 +58,7 @@ if (isset($message)) {
             padding: 20px;
         }
         .payment-input{
+            position:relative;
             height: 107px; /* Tinggi maksimum 150 piksel */
         }
         
@@ -65,6 +66,7 @@ if (isset($message)) {
             position: absolute;
             width: 500px; /* Tinggi maksimum 150 piksel */
             right:2px;
+            top:0px;
             border:2px;
         }
 
@@ -81,49 +83,53 @@ if (isset($message)) {
                 <div class="card">
                     <div class="card-header">Daftar Produk</div>
                     <div class="payment-input">
-                            <div class="card">
-                                <div class="card-body card-payment">
-                                <form action="" method="post">
-                                <input type="text" id="no-transaksi" class="d-none" name="notransaksi">
-
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label for="jenisPembayaran">Jenis Pembayaran:</label>
-                                            <select name="jenisPembayaran" class="form-control" id="jenisPembayaran">
-                                                <option value="tunai">Tunai</option>
-                                                <option value="debit">Debit</option>
-                                                <option value="kredit">Kredit</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <label for="jumlahBayar">Jumlah Bayar:</label>
-                                            <input type="number" class="form-control" name="jumlahBayar" placeholder="Contoh: 20000" id="jumlahBayar">
-                                        </div>
-
-                                        <div class="col-md-6">
-                                        </div>
-
-                                        <div class="col-md-6 mt-2 text-right">
-
-                                            <button onclick="SaveStruct();" type="button" class="btn btn-primary">Simpan</button>
-
-                                            <input name="finish" type="submit" class="btn btn-success" value="Selesai">
+                        
+                                <div class="col-lg-4 ml-3">
+                                    <div style="width:500px;">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="Search">Pencarian:</label>
+                                                <input id="Search" type="text" class="form-control" placeholder="Cari...">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="Scan">Scan Barcode:</label>
+                                                <input id="Scan" type="text" class="form-control" placeholder="Scan">
+                                            </div>
                                         </div>
                                     </div>
-                                    </form>
+                                </div>
 
+
+
+                                <div class="card-payment">
+                                    <form action="" method="post">
+                                        <input type="text" id="no-transaksi" class="d-none" name="notransaksi">
+                                        <input type="text" value="<?=$getUser->firstname ." ". $getUser->lastname?>" name="cashier" class="d-none">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="jenisPembayaran">Jenis Pembayaran:</label>
+                                                <select name="jenisPembayaran" class="form-control" id="jenisPembayaran">
+                                                    <option value="tunai">Tunai</option>
+                                                    <option value="debit">Debit</option>
+                                                    <option value="kredit">Kredit</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="jumlahBayar">Jumlah Bayar:</label>
+                                                <input type="number" class="form-control" name="jumlahBayar" placeholder="Contoh: 20000" id="jumlahBayar">
+                                            </div>
+                                            <div class="col-md-6">
+                                            </div>
+                                            <div class="col-md-6 mt-2 text-right">
+                                                <button onclick="SaveStruct();" type="button" class="btn btn-primary">Simpan</button>
+                                                <input name="finish" type="submit" class="btn btn-success" value="Selesai">
+                                            </div>
+                                        </div>
+                                    
+                                    </form>
                                 </div>
-                            </div>
                         </div>
-                        <div class="col-lg-6 mt-2">
-                            <div class="input-group">
-                                <input id="Search" type="text" class="form-control" placeholder="Cari...">
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary" type="button">Cari</button>
-                                </div>
-                            </div>
-                        </div>
+                      
                         <div class="card-body">
                         <div class="row" id="list-item">
                         <?php 
@@ -206,7 +212,7 @@ if (isset($message)) {
 
                             </div>
                             <div class="divider"></div>
-                                <table class="table">
+                                <table style="font-size: 13px;" class="table">
                                     <thead>
                                         <tr>
                                             <th>Nama Barang</th>
@@ -216,7 +222,7 @@ if (isset($message)) {
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="detailbarang">
+                                    <tbody  id="detailbarang">
                                         <?php $biaya=0;?>
                                         <?php foreach ($cache->result() as $item): ?>
                                         <tr>
@@ -259,9 +265,67 @@ if (isset($message)) {
             </div>
         </div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        focusElement();
+    });
+
+   
     var search = document.getElementById("Search");
+    var scan = document.getElementById("Scan");
+
+    scan.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            // Tombol "Enter" ditekan
+            var scannedData = scan.value;
+            $.ajax({
+                    url: "<?php echo base_url('Kasir/scan'); ?>",
+                    type: "POST",
+                    data: {
+                        kode: scannedData,
+                    },
+                    success: function(response) {
+                        scan.value = "";
+                        $.ajax({
+                        url: "<?php echo base_url('Kasir/cache_transaksi'); ?>",
+                        type: "GET",
+                        dataType: 'json',
+                        data: {},
+                        success: function(response) {
+                            // Proses data JSON yang diterima dengan looping
+                            $("#detailbarang").empty();
+                            $("#total-biaya").html(`
+                            Total Biaya: Rp.${response.totalBiaya}
+                            `);
+                            $.each(response.data, function(index, item) {
+                                // Tambahkan baris HTML untuk setiap elemen
+                                $("#detailbarang").append(
+                                    `
+                                    <tr>
+                                        <td>${item.nama_barang}</td>
+                                        <td>x${item.jumlah_barang}</td>
+                                        <td>Rp.${item.harga}</td>
+                                        <td>Rp.${item.sub_total}</td>
+                                        <td><a href="<?php echo base_url('kasir/delete-cache/')?>${item.id}" style="color:black"><i class="fas fa-trash"></i></a></td>
+                                    </tr>
+                                    `
+                                );
+                            });
+                            },
+                            error: function(error) {
+                                console.error('Error:', error);
+                            }
+                        });
+                    }
+                });
+
+
+            // Mencegah pengiriman formulir (jika elemen input berada dalam formulir)
+            event.preventDefault();
+        }
+    });
+        
     search.addEventListener('keyup', function () {
         $.ajax({
                 url: "<?php echo base_url('Kasir/searchItem/'); ?>"+search.value,
@@ -273,16 +337,9 @@ if (isset($message)) {
                     $("#list-item").empty();
                     $.each(response.data, function(index, item) {
                         index++;
-
-                        // <div class="">
-                        //         <h2>${index}</h2>
-                        //         <h2>${item.nama_barang}</h2>
-                        //         <h2>${item.stok}</h2>
-                        //         <h2>${item.gambar}</h2>
-                        //         <h2>${item.deskripsi}</h2>
-
-                        //     </div>
-
+                        setTimeout(function () {
+                        search.value = "";
+                        }, 1000);
                         // Tambahkan baris HTML untuk setiap elemen
                         $("#list-item").append(
                             `
@@ -316,7 +373,6 @@ if (isset($message)) {
                                     </div>
                                 </div>
                             </div>
-
                             `
                         );
                     });
@@ -328,6 +384,13 @@ if (isset($message)) {
             });
         });
   
+        function focusElement() {
+            var inputElement = document.getElementById('Scan');
+            if (inputElement) {
+                inputElement.focus();
+            }
+        }
+
 
         function SaveStruct(){
             var jenisPembayaran = document.getElementById("jenisPembayaran").value;
