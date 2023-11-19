@@ -33,13 +33,71 @@ class Kasir extends CI_Controller {
 
 		$this->load->view('templates/dashboard/footer');
 
+        if(isset($_POST['scan'])){
+            $kode = $this->input->post('key');
+            if (strpos($kode, '(') !== false || strpos($kode, ')') !== false) {
+                redirect('kasir/add');
+            }
+
+            $dataBarang = $this->BarangModel->getbyId($kode);
+            if($dataBarang){
+                $dataCache = array(
+                    'userId' => $_SESSION['id_user'],
+                    'nama_barang' => $dataBarang->nama_barang,
+                    'jumlah_barang' => 1,
+                    'harga_satuan' => $dataBarang->harga,
+                    'barangId' => $dataBarang->id
+                );
+                $dataTransaksi = array(
+                    'userId' => $_SESSION['id_user'],
+                    'status' => 'draft'
+                );
+               
+                $this->KasirModel->addcache($dataCache,$dataTransaksi);
+
+                $list = $this->KasirModel->getcache();
+                $totalBiaya = 0;
+                foreach($list->result() as $detail){
+                    $totalharga = $detail->harga_satuan * $detail->jumlah_barang;
+                    $totalBiaya = $totalBiaya + $totalharga;
+                }
+
+                $dataTransaksi = array(
+                    'userId' => $_SESSION['id_user'],
+                    'total_biaya' => $totalBiaya,
+                    'status' => 'draft'
+                );
+                $this->KasirModel->updateTransaksi($dataTransaksi);
+            }else{
+                $this->session->set_flashdata('msg_sweetalert', '<script>Swal.fire({
+                    title: "Gagal",
+                    text: "Produk Belum Terdaftar",
+                    icon: "error",})</script>'
+                );
+            }
+            
+            redirect('/kasir/add');
+        }
+
         if(isset($_POST['finish'])){
             $validasi = $this->KasirModel->validasiJumlahBarang();
-
+            
             if($validasi == true){
                $jumlahBayar = $this->input->post('jumlahBayar');
                if (!empty($jumlahBayar)) {
                     $noTransaksi = $this->input->post('notransaksi');
+                    if(empty($noTransaksi)){
+                            $noTransaksi = rand()."-".time();
+                            $dataTransaksi = array(
+                            'no_transaksi' => $noTransaksi,
+                            'userId' => $_SESSION['id_user'],
+                            'metode_pembayaran' => $_POST['jenisPembayaran'],
+                            'uang_pelanggan' => $jumlahBayar,
+                            'cashier' => $_POST['cashier'],
+                            'status' => 'draft'
+                        );
+                        $this->KasirModel->saveTransaction($dataTransaksi);
+                    }
                     $this->KasirModel->kurangiJumlahBarang();
                     $this->KasirModel->transferCacheToDetail();
                     $this->session->set_flashdata('msg_sweetalert', '<script>Swal.fire({
@@ -59,7 +117,7 @@ class Kasir extends CI_Controller {
             }elseif($validasi == false){
                 $this->session->set_flashdata('msg_sweetalert', '<script>Swal.fire({
 				title: "Gagal Melakukan Transaksi",
-				text: "Salah Satu Stok Produk Anda Tidak Cukup",
+				text: "Stok Barang Anda Tidak Cukup",
 				icon: "error",})</script>'
                 );
                 redirect('/kasir/add');
@@ -94,6 +152,29 @@ class Kasir extends CI_Controller {
         echo json_encode($output);
     }
 
+    public function scan(){
+        $dataBarang = $this->BarangModel->getById($_POST['kode']);
+        if($dataBarang){
+          if($dataBarang->stok > 0){
+            $dataCache = array(
+                'userId' => $_SESSION['id_user'],
+                'nama_barang' => $dataBarang->nama_barang,
+                'jumlah_barang' => 1,
+                'harga_satuan' => $dataBarang->harga,
+                'barangId' => $dataBarang->id
+            );
+    
+            $dataTransaksi = array(
+                'userId' => $_SESSION['id_user'],
+                'status' => 'draft'
+            );
+            
+            $this->KasirModel->addcache($dataCache,$dataTransaksi);
+          }
+        }
+        
+    }
+
 	public function execute_action() {
 		$dataCache = array(
 			'userId' => $_SESSION['id_user'],
@@ -104,18 +185,14 @@ class Kasir extends CI_Controller {
 		);
 
 		$dataTransaksi = array(
-			'userId' => $_SESSION['id_user'],
-			'status' => 'draft'
-		);
+            'userId' => $_SESSION['id_user'],
+            'status' => 'draft'
+        );
 		
         $this->KasirModel->addcache($dataCache,$dataTransaksi);
-
-		$link = base_url('assets/images/logo/sutanstore.png');
-		$this->KaryawanModel->getById($_SESSION['id_user']);
 	}
 
     public function cache_transaksi(){
-        
 		$list = $this->KasirModel->getcache();
 		$data = array();
         $totalBiaya = 0;
@@ -192,6 +269,7 @@ class Kasir extends CI_Controller {
 
     public function searchItem($id){
         $key = $id;
+
         $dataKaryawan = $this->KaryawanModel->getById($_SESSION['id_user']);
         $list = $this->KasirModel->searchBarang($key,$dataKaryawan->ownerId);
 

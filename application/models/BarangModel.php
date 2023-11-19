@@ -58,7 +58,6 @@ class BarangModel extends CI_Model{
 
             return $newStok;
         }
-
         return false;
     }
 

@@ -160,7 +160,6 @@ class Barang extends CI_Controller {
             );
     
             $this->BarangModel->addBarang($dataBarang);
-    
             $this->session->set_flashdata('msg_sweetalert', '<script>Swal.fire({
                 title: "Berhasil",
                 text: "Data Barang diTambahkan",
@@ -249,8 +248,6 @@ class Barang extends CI_Controller {
         redirect('barang/add');
 
     }
-
-
 
     public function checkGambar($str){
         $allowed_mime_type_arr = array('image/jpeg', 'image/png');
