@@ -59,17 +59,9 @@ if (isset($message)) {
         }
         .payment-input{
             position:relative;
-            height: 107px; /* Tinggi maksimum 150 piksel */
+            height: 177px; /* Tinggi maksimum 150 piksel */
         }
         
-        .card-payment{
-            position: absolute;
-            width: 500px; /* Tinggi maksimum 150 piksel */
-            right:2px;
-            top:0px;
-            border:2px;
-        }
-
     </style>
 
  <div class="wrapper">
@@ -78,14 +70,15 @@ if (isset($message)) {
     <div class="content-wrapper pb-3">
           <section class="content">
           <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-7">
                 <!-- Bagian Daftar Produk -->
                 <div class="card">
                     <div class="card-header">Daftar Produk</div>
                     <div class="payment-input">
                         
-                                <div class="col-lg-4 ml-3">
-                                    <div style="width:500px;">
+
+                                <div class="col-lg-10 ml-3">
+                                    <div>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <label for="Search">Pencarian:</label>
@@ -96,13 +89,7 @@ if (isset($message)) {
                                                 <input id="Scan" type="text" class="form-control" placeholder="Scan">
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-
-
-
-                                <div class="card-payment">
-                                    <form action="" method="post">
+                                         <form action="" method="post">
                                         <input type="text" id="no-transaksi" class="d-none" name="notransaksi">
                                         <input type="text" value="<?=$getUser->firstname ." ". $getUser->lastname?>" name="cashier" class="d-none">
                                         <div class="row">
@@ -125,9 +112,12 @@ if (isset($message)) {
                                                 <input name="finish" type="submit" class="btn btn-success" value="Selesai">
                                             </div>
                                         </div>
-                                    
-                                    </form>
+                                        </form>
+                                    </div>
                                 </div>
+
+
+                                
                         </div>
                       
                         <div class="card-body">
@@ -161,7 +151,7 @@ if (isset($message)) {
                                                     </div>
                                                 </div>
                                                 <div class="row justify-content-center">
-                                                    <div class="col-md-4 mt-2 mb-2">
+                                                    <div class="col-md-8 mt-2 mb-2">
                                                         <button onclick="button(<?=$index?>);" id="button-<?=$index?>" class="btn btn-primary btn-block mt-1">Tambah</button>
                                                     </div>
                                                 </div>
@@ -179,10 +169,10 @@ if (isset($message)) {
                 <!-- Bagian Struk Pesanan -->
                     <div class="struk-container">
                             <div class="logo">
-                                <img src="<?=base_url('assets/images/logo-toko/'.$getOwner->photo_toko);?>" alt="Logo Toko">
+                                <img src="<?=base_url('assets/images/logo/sutanstore.png');?>" alt="Logo Toko">
                             </div>
                             <div class="toko-name">
-                                <?=$getOwner->nama_toko?>
+                                Nama Toko Anda
                             </div>
                             <div class="follow-text">
                                 Follow us on Instagram or Facebook: @sutan.service
@@ -256,7 +246,7 @@ if (isset($message)) {
                             <div class="divider"></div>
                             <div class="detail">
                                 <div class="detail-item">
-                                    Rekening: <?=$getOwner->bankName?> <?=$getOwner->bankAccountNumber?> <?=$getOwner->bankAccountName?>
+                                    Rekening: BCA 0262026190 Irtan Sutan Montolalu
                                 </div>
                             </div>
                         </div>

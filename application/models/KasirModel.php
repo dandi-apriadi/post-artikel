@@ -104,12 +104,13 @@ class KasirModel extends CI_Model{
         }
     
         // Cek apakah barang ID sudah ada di tabel cache_transaksi
-        $existingCache = $this->db->get_where('cache_transaksi', array('barangId' => $dataCache['barangId']))->row();
+        $existingCache = $this->db->get_where('cache_transaksi', array('barangId' => $dataCache['barangId'],'userId' => $_SESSION['id_user']))->row();
     
         if ($existingCache) {
             // Jika sudah ada, tambahkan jumlah_barang dari nilai sebelumnya
             $dataCache['jumlah_barang'] += $existingCache->jumlah_barang;
             $this->db->where('barangId', $dataCache['barangId']);
+            $this->db->where('userId', $_SESSION['id_user']);
             $this->db->update('cache_transaksi', $dataCache);
         } else {
             // Jika belum ada, lakukan proses insert
@@ -313,10 +314,9 @@ class KasirModel extends CI_Model{
         return $query->num_rows();
     }
 
-    public function countTransactionByDate(){
-        $currentDate = date('Y-m-d');
+    public function countTransactionByDate($date){
         $this->db->where('userId', $_SESSION['id_user']);
-        $this->db->where('tanggal_pesanan', $currentDate);
+        $this->db->where('tanggal_pesanan', $date);
         $query = $this->db->get('transaksi');
         // Kembalikan jumlah baris
         return $query->num_rows();

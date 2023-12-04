@@ -62,6 +62,23 @@ class Owner extends CI_Controller {
         echo json_encode($output);
 	}
 
+	public function listTransaksi(){
+		$data['title'] = "Data Transaksi";
+		$data['getUser'] = $this->AuthModel->getDataLoggedIn($_SESSION['id_user']);
 
+		// jika bukan admin yg login, maka tdk bisa kesini
+		if ($data['getUser']->role != 'owner')
+			redirect('dashboard');
+
+		$this->load->view('templates/dashboard/head', $data);
+		$this->load->view('templates/dashboard/navbar', $data);
+		$data['list'] = $this->OwnerModel->showTransaction();
+		$data['date1'] = $this->OwnerModel->getDate('min');
+		$data['date2'] = $this->OwnerModel->getDate('max');
+		$data['sidebar'] = $this->load->view('templates/dashboard/sidebarOwner', $data, true);
+		$this->load->view('pages/owner/listTransaksi', $data);
+
+		$this->load->view('templates/dashboard/footer');
+	}
 
 }
