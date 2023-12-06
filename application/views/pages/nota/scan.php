@@ -113,7 +113,7 @@ if (isset($message)) {
             } else {
             }
         }else{
-            if(pembayaran >= sisa){
+            if(pembayaran < sisa){
             if(statusNota == "Selesai" || statusNota == "Menunggu Customer"){
                 var isConfirmed = confirm("Apakah Anda yakin ingin Menyelesaikan Nota ini?");
                 if (isConfirmed) {
@@ -124,7 +124,7 @@ if (isset($message)) {
                             data: {
                                 kode: scan.value,
                                 keterangan: keterangan,
-                                pembayaran: pembayaran,
+                                pembayaranNota: pembayaran,
                                 statusNota: statusNotaBaru
                             },
                             success: function(response) {
@@ -178,7 +178,7 @@ if (isset($message)) {
                                 <label for="kondisi">Sisa Pembayaran: ${response.sisa}</label>
                                 <input id='sisa' value="${response.sisaSystem}" class="d-none">
                                 <input id='status-nota' value="${response.status_nota}" class="d-none">
-                                <input id="pembayaran" type="number" class="form-control" placeholder="Contoh: 400000">
+                                <input id='pembayaran' value="${response.bayar}" type="number" class="form-control" placeholder="Contoh: 400000">
                             </div>
                             <div class="form-group">
                                 <label for="kondisi">Status Nota:</label>

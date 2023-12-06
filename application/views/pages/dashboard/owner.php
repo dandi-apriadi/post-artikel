@@ -13,6 +13,27 @@ if (isset($message)) {
 
 ?>
 
+<style>
+    body {
+      background-color: #f8f9fa; /* Warna latar belakang abu-abu muda */
+    }
+    .container {
+      margin-top: 50px;
+    }
+    .custom-select-label {
+      color: #3498db; /* Warna biru cerah untuk label */
+    }
+    .custom-select {
+      border-color: #3498db; /* Warna biru cerah untuk border */
+    }
+    .custom-select:hover {
+      border-color: #2980b9; /* Warna biru yang lebih tua saat hover */
+    }
+    .custom-select:focus {
+      border-color: #2980b9; /* Warna biru yang lebih tua saat focus */
+      box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25); /* Efek shadow saat focus */
+    }
+  </style>
 <div class="wrapper">
   <!-- Sidebar -->
   <?= $sidebar ?>
@@ -64,7 +85,6 @@ if (isset($message)) {
 				</div>
 				</div>
 			</div>
-
 				<!-- Chart: Daily Transactions -->
 				<div class="col-md-12">
 					<?php 
@@ -78,6 +98,7 @@ if (isset($message)) {
 						if($index < 7){
 							echo "Grafik Transaksi Akan Keluar Setelah 7 Hari Kerja";
 						}
+						
 						echo "<canvas id='dailyTransactionsChart'></canvas>";
 					}
 					?>
@@ -92,33 +113,34 @@ if (isset($message)) {
 
 
 <script>
-  // Chart.js
-  var ctx = document.getElementById('dailyTransactionsChart').getContext('2d');
-  var day1 = document.getElementById("Day-1").value;
-  var day2 = document.getElementById("Day-2").value;
-  var day3 = document.getElementById("Day-3").value;
-  var day4 = document.getElementById("Day-4").value;
-  var day5 = document.getElementById("Day-5").value;
-  var day6 = document.getElementById("Day-6").value;
-  var day7 = document.getElementById("Day-7").value;
-  var dailyTransactionsChart = new Chart(ctx, {
-    type: 'line',
-    data: {		
-      labels: [day7,day6,day5,day4,day3,day2,day1],
-      datasets: [{
-        label: 'Transaksi Minggu ini',
-        data: [<?=$day7?>, <?=$day6?>, <?=$day5?>, <?=$day4?>, <?=$day3?>, <?=$day2?>, <?=$day1?>],
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 2,
-        fill: false
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
+
+		var ctx = document.getElementById('dailyTransactionsChart').getContext('2d');
+		var day1 = document.getElementById("Day-1").value;
+		var day2 = document.getElementById("Day-2").value;
+		var day3 = document.getElementById("Day-3").value;
+		var day4 = document.getElementById("Day-4").value;
+		var day5 = document.getElementById("Day-5").value;
+		var day6 = document.getElementById("Day-6").value;
+		var day7 = document.getElementById("Day-7").value;
+		var dailyTransactionsChart = new Chart(ctx, {
+			type: 'line',
+			data: {		
+			labels: [day7,day6,day5,day4,day3,day2,day1],
+			datasets: [{
+				label: 'Transaksi Minggu ini',
+				data: [<?=$day7?>, <?=$day6?>, <?=$day5?>, <?=$day4?>, <?=$day3?>, <?=$day2?>, <?=$day1?>],
+				borderColor: 'rgba(75, 192, 192, 1)',
+				borderWidth: 2,
+				fill: false
+			}]
+			},
+			options: {
+			scales: {
+				y: {
+				beginAtZero: true
+				}
+			}
+			}
+		});
+	
 </script>

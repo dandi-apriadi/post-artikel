@@ -380,6 +380,7 @@ class Nota extends CI_Controller {
 				'kerusakan' => $nota->kerusakan,
 				'status_nota' => $nota->status_nota,
 				'url' => $url,
+				'bayar' => $nota->pembayaran,
 				'perbaikan' => $nota->perbaikan,
 				'harga_service' => rupiah($nota->harga_service),
 				'uang_muka' => rupiah($nota->uang_muka),
@@ -511,7 +512,7 @@ class Nota extends CI_Controller {
 		$keterangan =  nl2br($this->input->post('keterangan'));
 		$invoice = $this->input->post('kode');
 		$status = $this->input->post('statusNota');
-		$pembayaran = $this->input->post('pembayaran');
+		$pembayaran = $this->input->post('pembayaranNota');
 		$statusNota = 'Nota Telah dibayar, Melalui Customer Service ' . $data['getUser']->firstname.' '.$data['getUser']->lastname;
 
 		$this->NotaModel->update(array(
