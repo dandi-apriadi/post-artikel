@@ -255,30 +255,16 @@ if (isset($message)) {
     function update(){
         var status = document.getElementById("kondisi");
         var keterangan = document.getElementById("keterangan");
-        var isConfirmed = confirm("Apakah Anda yakin ingin Update Nota ini?");
-        if (isConfirmed) {
-            if(status == 'Tidak Selesai'){
-                var isConfirmed2 = confirm("Apakah Anda tidak dapat Menyelesaikan Nota ini?");
-                if(isConfirmed2){
-                    $.ajax({
-                    url: "<?php echo base_url('Nota/updateNota'); ?>",
-                    type: "POST",
-                    dataType: 'json',
-                    data: {
-                        kode: scan.value,
-                        status: status.value,
-                        keterangan: keterangan.value
-                    },
-                    success: function(response) {
-                        location.reload();
-                    }
-                    });
-                    alert("Nota dibatalkan.");
 
-                }else{
-                    alert("Operasi dibatalkan.");
-                }
-            }else{
+        Swal.fire({
+            title: 'Konfirmasi!',
+            text: 'Apakah Anda yakin ingin Update Nota ini?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Lanjutkan!',
+            cancelButtonText: 'Batal'
+            }).then((result) => {
+            if (result.value) {
                 $.ajax({
                     url: "<?php echo base_url('Nota/updateNota'); ?>",
                     type: "POST",
@@ -289,14 +275,21 @@ if (isset($message)) {
                         keterangan: keterangan.value
                     },
                     success: function(response) {
+                        Swal.fire({
+                        title: "Berhasil",
+                        text: "Nota Telah di Update",
+                        icon: "success",})
                         location.reload();
                     }
-                });
+                    });
+            } else {
+                Swal.fire({
+                title: "Operasi diBatalkan",
+                text: "Nota ini akan Menunggu Update Berikutnya",
+                icon: "error",})
             }
-        } else {
-            // Menampilkan pesan jika dibatalkan
-            alert("Operasi dibatalkan.");
-        }
+        });
+
     }
 
     

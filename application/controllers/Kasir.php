@@ -84,7 +84,7 @@ class Kasir extends CI_Controller {
             $validasi = $this->KasirModel->validasiJumlahBarang();
             
             if($validasi == true){
-               $jumlahBayar = $this->input->post('jumlahBayar');
+               $jumlahBayar = $this->input->post('testing2');
                if (!empty($jumlahBayar)) {
                     $konfirmasiHarga = $this->KasirModel->konfirmasi($jumlahBayar);
                     if($konfirmasiHarga == true){
@@ -133,7 +133,6 @@ class Kasir extends CI_Controller {
                 );
                 redirect('/kasir/add');
             }
-            
         }
     }
 

@@ -91,9 +91,16 @@ if (isset($message)) {
         }
    
     function working() {
-        var isConfirmed = confirm("Apakah Anda yakin ingin Mengerjakan Nota ini?");
-        if (isConfirmed) {
-            $.ajax({
+        Swal.fire({
+            title: 'Konfirmasi!',
+            text: 'Apakah Anda yakin ingin Mengerjakan Nota ini',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Lanjutkan!',
+            cancelButtonText: 'Batal'
+            }).then((result) => {
+            if (result.value) {
+                $.ajax({
                     url: "<?php echo base_url('Nota/takeNota'); ?>",
                     type: "POST",
                     dataType: 'json',
@@ -101,13 +108,20 @@ if (isset($message)) {
                         kode: scan.value,
                     },
                     success: function(response) {
+                        Swal.fire({
+                        title: "Success",
+                        text: "Anda Sudah Mengambil Nota Ini",
+                        icon: "success",})
                         window.location.href = "working/"+scan.value;
                     }
                 });
-        } else {
-            // Menampilkan pesan jika dibatalkan
-            alert("Operasi dibatalkan.");
-        }
+            } else {
+                Swal.fire({
+                title: "Operasi diBatalkan",
+                text: "Nota ini akan Menunggu Teknisi Lain",
+                icon: "error",})
+            }
+        });
     }
 
     scan.addEventListener('keydown', function (event) {

@@ -64,7 +64,8 @@ if (isset($message)) {
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header cetakNota">
-                        Data Nota
+                        Data Nota 
+                        <input type="text" class="d-none" id="testing2" placeholder="testing2">
                     </div>
                     <div id="nota" class="card-body">
                         
@@ -90,7 +91,7 @@ if (isset($message)) {
 
     function update(){
         var sisa = $("#sisa").val();
-        var pembayaran = $("#pembayaran").val();
+        var pembayaran = $("#testing2").val();
         var statusNota = $("#status-nota").val();
         var statusNotaBaru = $("#status-nota-baru").val();
         var keterangan = $("#keterangan").val();
@@ -113,13 +114,24 @@ if (isset($message)) {
             } else {
             }
         }else{
-            if(pembayaran < sisa){
+            if(pembayaran >= sisa){
             if(statusNota == "Selesai" || statusNota == "Menunggu Customer"){
-                var isConfirmed = confirm("Apakah Anda yakin ingin Menyelesaikan Nota ini?");
-                if (isConfirmed) {
-                    $.ajax({
+                Swal.fire({
+                    title: 'Konfirmasi!',
+                    text: 'Apakah Anda yakin ingin Menyelesaikan Nota ini?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, Lanjutkan!',
+                    cancelButtonText: 'Batal'
+                    }).then((result) => {
+                    if (result.value) {
+                        Swal.fire({
+                        title: "Success",
+                        text: "Nota Telah di Perbarui",
+                        icon: "success",})
+                        $.ajax({
                             url: "<?php echo base_url('Nota/bayarNota'); ?>",
-                            type: "POST",
+                            type: "POST",   
                             dataType: 'json',
                             data: {
                                 kode: scan.value,
@@ -131,13 +143,25 @@ if (isset($message)) {
                                 location.reload();
                             }
                         });
-                } else {
-                }
+                    } else {
+                        Swal.fire({
+                        title: "Operasi diBatalkan",
+                        text: "Nota ini akan Menunggu Keputusan Berikutnya",
+                        icon: "error",})
+                    }
+                });
+
             }else{
-                alert("Pembayaran Gagal, Status Nota Harus sudah Selesai Sebelum Melakukan Pembayaran");
+                Swal.fire({
+                title: "Pembayaran Gagal",
+                text: "Status Nota Harus Sudah Selesai Sebelum Melakukan Pembayaran",
+                icon: "error",})
             }
             }else{
-                alert("jumlah pembayaran tidak boleh dibawah jumlah sisa bayar");
+                Swal.fire({
+                title: "Pembayaran Gagal",
+                text: "Jumlah Pembayaran Tidak Boleh dibawah Jumlah sisa Bayar",
+                icon: "error",})
             }
         }
     }
@@ -147,7 +171,39 @@ if (isset($message)) {
                 inputElement.focus();
             }
         }
-   
+
+    function formatCurrency(input) {
+        var angka2 = input.value;
+        var cleaned = angka2.replace(/[^\d]/g, '');
+
+        // Parse sebagai integer
+        var integerValue = parseInt(cleaned, 10);
+
+        $("#testing2").val(integerValue);
+
+        var angka = $("#testing2").val();
+
+        var angkaStr = angka.toString();
+
+        // Pisahkan angka menjadi bagian desimal dan bagian angka
+        var parts = angkaStr.split('.');
+        var angkaBagian = parts[0];
+
+        // Pisahkan bagian angka menjadi grup tiga digit
+        var reversed = angkaBagian.split('').reverse().join('');
+        var groups = reversed.match(/\d{1,3}/g);
+        var formatted = groups.join('.').split('').reverse().join('');
+
+        // Tambahkan koma untuk bagian desimal jika ada
+        var desimalBagian = parts[1] ? ',' + parts[1] : '';
+
+        // Gabungkan bagian angka dan desimal
+        var hasilAkhir = formatted + desimalBagian;
+
+        // Tampilkan nilai yang telah diformat
+        $("#pembayaran").val(hasilAkhir);
+
+}
 
     scan.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
@@ -178,10 +234,10 @@ if (isset($message)) {
                                 <label for="kondisi">Sisa Pembayaran: ${response.sisa}</label>
                                 <input id='sisa' value="${response.sisaSystem}" class="d-none">
                                 <input id='status-nota' value="${response.status_nota}" class="d-none">
-                                <input id='pembayaran' value="${response.bayar}" type="number" class="form-control" placeholder="Contoh: 400000">
+                                <input id='pembayaran' onkeyup="formatCurrency(this)" class="form-control" placeholder="Contoh: 400000">
                             </div>
                             <div class="form-group">
-                                <label for="kondisi">Status Nota:</label>
+                                <label for="kondisi">Status Nota: </label>
                                 <select class="form-control" id="status-nota-baru">
                                     <option value="${response.status_nota}">${response.status_nota}</option>
                                     <option disabled>-----------------</option>

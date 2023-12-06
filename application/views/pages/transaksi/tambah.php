@@ -101,7 +101,8 @@ if (isset($message)) {
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="jumlahBayar">Jumlah Bayar:</label>
-                                                <input type="number" class="form-control" name="jumlahBayar" placeholder="Contoh: 20000" id="jumlahBayar">
+                                                <input type="text" class="d-none" name="testing2" id="testing2" placeholder="testing2">
+                                                <input type="text" onkeyup="formatCurrency(this)" class="form-control" name="jumlahBayar" placeholder="Contoh: 20000" id="jumlahBayar">
                                             </div>
                                             <div class="col-md-6">
                                             </div>
@@ -237,7 +238,7 @@ if (isset($message)) {
                             <div class="divider"></div>
                             <div class="detail">
                                 <div class="detail-item">
-                                    Rekening: BCA 0262026190 Irtan Sutan Montolalu
+                                    Rekening: BCA 0262026190 Irtan Sutan Montolalu <br>
                                 </div>
                             </div>
                         </div>
@@ -245,6 +246,7 @@ if (isset($message)) {
             </section>
             </div>
         </div>
+
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 
@@ -371,10 +373,43 @@ if (isset($message)) {
             }
         }
 
+        function formatCurrency(input) {
+        var angka2 = input.value;
+        var cleaned = angka2.replace(/[^\d]/g, '');
+
+        // Parse sebagai integer
+        var integerValue = parseInt(cleaned, 10);
+
+        $("#testing2").val(integerValue);
+
+        var angka = $("#testing2").val();
+
+        var angkaStr = angka.toString();
+
+        // Pisahkan angka menjadi bagian desimal dan bagian angka
+        var parts = angkaStr.split('.');
+        var angkaBagian = parts[0];
+
+        // Pisahkan bagian angka menjadi grup tiga digit
+        var reversed = angkaBagian.split('').reverse().join('');
+        var groups = reversed.match(/\d{1,3}/g);
+        var formatted = groups.join('.').split('').reverse().join('');
+
+        // Tambahkan koma untuk bagian desimal jika ada
+        var desimalBagian = parts[1] ? ',' + parts[1] : '';
+
+        // Gabungkan bagian angka dan desimal
+        var hasilAkhir = formatted + desimalBagian;
+
+        // Tampilkan nilai yang telah diformat
+        $("#jumlahBayar").val(hasilAkhir);
+
+        }
+
 
         function SaveStruct(){
             var jenisPembayaran = document.getElementById("jenisPembayaran").value;
-            var uangPelanggan = document.getElementById("jumlahBayar").value;
+            var uangPelanggan = document.getElementById("testing2").value;
             $.ajax({
                 url: "<?php echo base_url('Kasir/saveTransaction'); ?>",
                 type: "POST",
