@@ -36,6 +36,8 @@ $route['barang/search/(:any)'] = 'Barang/searchItem/$1';
 //owner
 $route['owner/list'] = 'Owner/list';
 $route['owner/list-transaksi'] = 'Owner/listTransaksi';
+$route['owner/list-nota'] = 'Owner/listNota';
+
 //kasir
 $route['kasir/add'] = 'Kasir/tambah';
 $route['kasir/delete-cache/(:num)'] = 'Kasir/deleteCache/$1';

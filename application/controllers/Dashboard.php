@@ -61,13 +61,19 @@ class Dashboard extends CI_Controller {
 			$data['totalBarang'] = $this->OwnerModel->totalData('barang');
 			$data['totalKaryawan'] = $this->OwnerModel->totalData('karyawan');
 			$data['totalTransaksi'] = $this->OwnerModel->totalData('transaksi');
-			$data['totalNota'] = $this->OwnerModel->totalData('nota');
+			$data['totalNota'] = $this->OwnerModel->totalData('nota_teknisi');
 			$data['transaksiMingguan'] = $this->OwnerModel->getDataTransaction();
 			$index = 0;
-			foreach ($data['transaksiMingguan']->result() as $transaksi) {
-				$index++;
-				$data['day'.$index] = $this->OwnerModel->CountTransactionByDate($transaksi->tanggal_pesanan);
+
+			if($data['transaksiMingguan'] == false){
+				$data['transaksiNone'] = "Anda Belum Memiliki Transaksi";
+			}else{
+				foreach ($data['transaksiMingguan']->result() as $transaksi) {
+					$index++;
+					$data['day'.$index] = $this->OwnerModel->CountTransactionByDate($transaksi->tanggal_pesanan);
+				}
 			}
+			
 			$data['sidebar'] = $this->load->view('templates/dashboard/sidebarOwner', $data, true);
 			$this->load->view('pages/dashboard/owner', $data);
 

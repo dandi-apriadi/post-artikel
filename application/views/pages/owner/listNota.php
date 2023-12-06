@@ -32,12 +32,12 @@ if (isset($message)) {
 										<form class="form-inline" style="text-align: left;">
 											<div class="row">
 												<div class="col-md-6">
-													<label>Mulai : </label>
-													<input type="date" class="form-control" placeholder="Start" id="date1" value="<?=$date1?>" />
+													<label>Mulai :</label>
+													<input type="datetime-local" class="form-control" placeholder="Start" id="date1" value="<?=$date1?>" />
 												</div>
 												<div class="col-md-6">
 													<label>Sampai :</label>
-													<input type="date" class="form-control" placeholder="End" id="date2" value="<?=$date2?>"/>
+													<input type="datetime-local" class="form-control" placeholder="End" id="date2" value="<?=$date2?>"/>
 												</div>
 
 											</div>
@@ -59,16 +59,14 @@ if (isset($message)) {
 									<tr>
 										<th>No</th>
 										<th>No Transaksi</th>
-										<th>Cashier</th>
-										<th>Tanggal Transaksi</th>
-										<th>Total Biaya</th>
-										<th>Diskon</th>
-										<th>Metode Pembayaran</th>
-										<th>Status</th>
+										<th>Nama Customer</th>
+										<th>Tanggal Masuk</th>
+										<th>Status Nota</th>
+										<th>Status Pembayaran</th>
 										<th>Action</th>
 									</tr>
 								</thead>
-								<tbody id="list-transaksi">
+								<tbody id="list-nota">
 								<?php
 								$index = 0;
 								foreach ($list as $item): ?>
@@ -77,14 +75,12 @@ if (isset($message)) {
 								?>
 									<tr style="<?=$rowColorClass?>">
 															<td><?=$index?></td>
-									<td><?=$item->no_transaksi?></td>
-									<td><?=$item->cashier?></td>
-									<td><?=$item->tanggal_pesanan?></td>
-									<td>Rp.<?=number_format($item->total_biaya, 0, '.', ',');?></td>
-									<td>Rp.<?=number_format($item->diskon, 0, '.', ',');?></td>
-									<td><?=$item->metode_pembayaran?></td>
-									<td><?=$item->status?></td>
-															<td><a href="<?php base_url('kasir/detail-transaksi/'.$item->no_transaksi);?>" class='btn btn-primary btn-sm'>Detail</a></td>
+									<td><?=$item->no_invoice?></td>
+									<td><?=$item->nama_customer?></td>
+									<td><?=$item->tanggal_masuk?></td>
+									<td><?=$item->status_nota?></td>
+									<td><?=$item->status_pembayaran?></td>
+									<td><a href="<?php base_url('nota/detail/'.$item->no_invoice);?>" class='btn btn-primary btn-sm'>Detail</a></td>
 									</tr>   
 								<?php endforeach; ?>
 								</tbody>
@@ -120,7 +116,7 @@ if (isset($message)) {
 	function search(){
 		
 		$.ajax({
-                url: "<?php echo base_url('Owner/searchTransaksi/'); ?>",
+                url: "<?php echo base_url('Owner/searchNota/'); ?>",
                 type: "POST",
                 dataType: 'json',
                 data: {
@@ -129,20 +125,18 @@ if (isset($message)) {
 					end: End.value
 				},
                 success: function(response) {
-                    $("#list-transaksi").empty();
+                    $("#list-nota").empty();
                     $.each(response.data, function(index, item) {
                         // Tambahkan baris HTML untuk setiap elemen
-                        $("#list-transaksi").append(
+                        $("#list-nota").append(
                             `
 							<tr style="${item.color}">
 								<td>${item.no}</td>
-								<td>${item.no_transaksi}</td>
-								<td>${item.cashier}</td>
-								<td>${item.tanggal_pesanan}</td>
-								<td>Rp.${item.total_biaya}</td>
-								<td>Rp.${item.diskon}</td>
-								<td>${item.metode_pembayaran}</td>
-								<td>${item.status}</td>
+								<td>${item.no_invoice}</td>
+								<td>${item.nama_customer}</td>
+								<td>${item.tanggal_masuk}</td>
+								<td>Rp.${item.status_nota}</td>
+								<td>Rp.${item.status_pembayaran}</td>
 								<td><a href="${item.url}" class='btn btn-primary btn-sm'>Detail</a></td>
 							</tr>   
                             `

@@ -62,7 +62,7 @@ if (isset($message)) {
 				<?php }else if($getKaryawan->status_karyawan == 'customer service'){ ?>
 				
 					<h3>Hai, <?= $getUser->firstname.' '.$getUser->lastname?></h3>
-				<h6>Anda adalah Teknisi di <?= $getOwner->nama_toko ?></h6><hr/>
+				<h6>Anda adalah Customer Service di <?= $getOwner->nama_toko ?></h6><hr/>
 
 				<div class="row">
 					<div class="col-md-4">

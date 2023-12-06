@@ -67,7 +67,20 @@ if (isset($message)) {
 
 				<!-- Chart: Daily Transactions -->
 				<div class="col-md-12">
-				<canvas id="dailyTransactionsChart"></canvas>
+					<?php 
+					if($transaksiMingguan == false){
+						echo "$transaksiNone";
+					}else{
+						$index=0; foreach ($transaksiMingguan->result() as $item):
+						$index++; ?>
+						<input type="text" id="Day-<?=$index?>" value="<?=$item->tanggal_pesanan?>" class="d-none">
+						<?php endforeach;
+						if($index < 7){
+							echo "Grafik Transaksi Akan Keluar Setelah 7 Hari Kerja";
+						}
+						echo "<canvas id='dailyTransactionsChart'></canvas>";
+					}
+					?>
 				</div>
 			</div>	
 
@@ -76,10 +89,7 @@ if (isset($message)) {
 	</div>
 </div>
 
-<?php $index=0; foreach ($transaksiMingguan->result() as $item): ?>
-	<?php $index++;?>
-	<input type="text" id="Day-<?=$index?>" value="<?=$item->tanggal_pesanan?>" class="d-none">
-	<?php endforeach; ?>
+
 
 <script>
   // Chart.js

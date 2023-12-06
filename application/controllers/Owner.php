@@ -72,13 +72,103 @@ class Owner extends CI_Controller {
 
 		$this->load->view('templates/dashboard/head', $data);
 		$this->load->view('templates/dashboard/navbar', $data);
-		$data['list'] = $this->OwnerModel->showTransaction();
-		$data['date1'] = $this->OwnerModel->getDate('min');
-		$data['date2'] = $this->OwnerModel->getDate('max');
+		$data['list'] = $this->OwnerModel->showTransaction('transaksi');
+		$data['date1'] = $this->OwnerModel->getDate('min','transaksi');
+		$data['date2'] = $this->OwnerModel->getDate('max','transaksi');
 		$data['sidebar'] = $this->load->view('templates/dashboard/sidebarOwner', $data, true);
 		$this->load->view('pages/owner/listTransaksi', $data);
-
 		$this->load->view('templates/dashboard/footer');
+	}
+
+	public function searchTransaksi(){
+        $key = $this->input->post('key');
+		$start = date('Y-m-d', strtotime(str_replace('-', '/', $this->input->post('start'))));
+		$end = date('Y-m-d', strtotime(str_replace('-', '/', $this->input->post('end'))));
+
+
+        $list = $this->OwnerModel->searchTransaksi(array('key' => $key,'start' => $start,'end' => $end));
+		$data = array();
+        $no = 0;
+        foreach($list->result() as $detail){
+			$no++;
+			$rowColorClass = ($no % 2 == 0) ? 'background-color: #FFFFFF;' : 'background-color: #F2F2F2;';
+			$url = base_url('kasir/detail-transaksi/'.$detail->no_transaksi);
+            $total_bayar = number_format($detail->total_biaya, 0, '.', ',');
+            $diskon = number_format($detail->diskon, 0, '.', ',');
+			$row = array();
+            $row = array(
+				'no' => $no,
+				'color' => $rowColorClass,
+				'url' => $url,
+                'no_transaksi' => $detail->no_transaksi,
+                'cashier' => $detail->cashier,
+                'tanggal_pesanan' => $detail->tanggal_pesanan,
+                'total_biaya' => $total_bayar,
+                'diskon' => $diskon,
+                'metode_pembayaran' => $detail->metode_pembayaran,
+				'status' => $detail->status
+            );
+
+            $data[] = $row;
+		}
+        
+        $output = array(
+	        "data" => $data
+	    );
+        echo json_encode($output);
+	}
+
+
+	public function listNota(){
+		$data['title'] = "Data Nota Teknisi";
+		$data['getUser'] = $this->AuthModel->getDataLoggedIn($_SESSION['id_user']);
+
+		// jika bukan admin yg login, maka tdk bisa kesini
+		if ($data['getUser']->role != 'owner')
+			redirect('dashboard');
+
+		$this->load->view('templates/dashboard/head', $data);
+		$this->load->view('templates/dashboard/navbar', $data);
+		$data['list'] = $this->OwnerModel->showTransaction('nota_teknisi');
+		$data['date1'] = $this->OwnerModel->getDate('min','nota_teknisi');
+		$data['date2'] = $this->OwnerModel->getDate('max','nota_teknisi');
+		$data['sidebar'] = $this->load->view('templates/dashboard/sidebarOwner', $data, true);
+		$this->load->view('pages/owner/listNota', $data);
+		$this->load->view('templates/dashboard/footer');
+	}
+
+	public function searchNota(){
+        $key = $this->input->post('key');
+		$start = $this->input->post('start');
+		$end = $this->input->post('end');
+
+        $list = $this->OwnerModel->searchNota(array('key' => $key,'start' => $start,'end' => $end));
+		$data = array();
+        $no = 0;
+        foreach($list->result() as $detail){
+			$no++;
+			$rowColorClass = ($no % 2 == 0) ? 'background-color: #FFFFFF;' : 'background-color: #F2F2F2;';
+			$url = base_url('nota/detail/'.$detail->no_invoice);
+			$row = array();
+            $row = array(
+				'no' => $no,
+				'color' => $rowColorClass,
+				'url' => $url,
+                'no_invoice' => $detail->no_invoice,
+                'nama_customer' => $detail->nama_customer,
+                'tanggal_masuk' => $detail->tanggal_masuk,
+                'status_nota' => $detail->status_nota,
+                'status_pembayaran' => $detail->status_pembayaran,
+            );
+
+            $data[] = $row;
+		}
+        
+        $output = array(
+	        "data" => $data
+	    );
+        echo json_encode($output);
+
 	}
 
 }

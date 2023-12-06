@@ -119,13 +119,13 @@ class OwnerModel extends CI_Model{
                 }
             }
             return $index;
-        }elseif($table == 'nota'){
+        }elseif($table == 'nota_teknisi'){
             $this->db->where('ownerId', $_SESSION['id_user']);
             $query = $this->db->get('karyawan')->result();
             $index = 0;
             foreach ($query as $karyawan) {
                 $this->db->where('teknisiId', $karyawan->userId);
-                $queryTransaksi = $this->db->get('nota_service')->result();
+                $queryTransaksi = $this->db->get('nota_teknisi')->result();
                 foreach ($queryTransaksi as $item) {
                     $index++;
                 }
@@ -135,22 +135,34 @@ class OwnerModel extends CI_Model{
     }
 
     public function getDataTransaction(){
-        $this->db->where('ownerId', $_SESSION['id_user']);
-        $query = $this->db->get('karyawan')->result();
-            foreach ($query as $karyawan) {
-                $this->db->where('userId', $karyawan->userId);
-                $this->db->where('status', 'submitted');
-                $queryTransaksi = $this->db->get('transaksi')->result();
-                foreach ($queryTransaksi as $item) {
-                    $this->db->select('tanggal_pesanan');
-                    $this->db->distinct();
-                    $this->db->from('transaksi');
-                    $this->db->order_by('tanggal_pesanan', 'DESC'); 
-                    $this->db->limit(7);
-                    $query = $this->db->get();
-                    return $query;
+
+        $this->db->from('transaksi');
+        $this->db->where('ownerId', $_SESSION['id_user']); 
+        $jumlah_data = $this->db->count_all_results();
+
+        if ($jumlah_data > 0) {
+            $this->db->where('ownerId', $_SESSION['id_user']);
+            $query = $this->db->get('karyawan')->result();
+                foreach ($query as $karyawan) {
+                    $this->db->where('userId', $karyawan->userId);
+                    $this->db->where('status', 'submitted');
+                    $queryTransaksi = $this->db->get('transaksi')->result();
+                    foreach ($queryTransaksi as $item) {
+                        $this->db->select('tanggal_pesanan');
+                        $this->db->distinct();
+                        $this->db->where('ownerId', $_SESSION['id_user']); 
+                        $this->db->from('transaksi');
+                        $this->db->order_by('tanggal_pesanan', 'DESC'); 
+                        $this->db->limit(7);
+                        $query = $this->db->get();
+                        return $query;
+                    }
                 }
-            }
+        } else {
+           return false;
+        }
+
+       
     }
 
     public function CountTransactionByDate($date){
@@ -159,12 +171,16 @@ class OwnerModel extends CI_Model{
         return $this->db->count_all_results();
     }
 
-    public function getDate($type){
-
+    public function getDate($type,$table){
+        if($table == "nota_teknisi"){
+            $field = "tanggal_masuk";
+        }elseif($table == "transaksi"){
+            $field = "tanggal_pesanan";
+        }
         if($type == 'min'){
-            $this->db->where('userId',$_SESSION['id_user']);
-            $this->db->select_min('tanggal_pesanan', 'earliest_date');
-            $query = $this->db->get('transaksi');
+            $this->db->where('ownerId',$_SESSION['id_user']);
+            $this->db->select_min($field, 'earliest_date');
+            $query = $this->db->get($table);
     
             // Periksa apakah query berhasil
             if ($query->num_rows() > 0) {
@@ -173,9 +189,9 @@ class OwnerModel extends CI_Model{
                 return null;
             }
         }elseif($type == 'max'){
-            $this->db->where('userId',$_SESSION['id_user']);
-            $this->db->select_max('tanggal_pesanan', 'latest_date');
-            $query = $this->db->get('transaksi');
+            $this->db->where('ownerId',$_SESSION['id_user']);
+            $this->db->select_max($field, 'latest_date');
+            $query = $this->db->get($table);
 
             // Periksa apakah query berhasil dieksekusi
             if ($query->num_rows() > 0) {
@@ -186,13 +202,61 @@ class OwnerModel extends CI_Model{
         }
     }
 
-    public function showTransaction(){
-        $this->db->where('userId', $_SESSION['id_user']);
-        $result = $this->db->get('transaksi');
+    public function showTransaction($table){
+        if($table == "nota_teknisi"){
+            $field = "tanggal_masuk";
+        }elseif($table == "transaksi"){
+            $field = "tanggal_pesanan";
+        }
+        $this->db->where('ownerId', $_SESSION['id_user']);
+        $this->db->order_by($field, 'desc');
+        $result = $this->db->get($table);
         if ($result->num_rows() > 0) {
             return $result->result();
         } else {
             return array();
         }
     }
+
+    public function searchNota($data) {
+        $this->db->where('ownerId', $_SESSION['id_user']);
+    
+        // Tambahkan kondisi where untuk rentang tanggal
+        $this->db->where('tanggal_masuk >=', $data['start']);
+        $this->db->where('tanggal_masuk <=', $data['end']);
+    
+        // Kondisi like dikelompokkan dengan tanda kurung
+        $this->db->group_start();
+        $this->db->like('no_invoice', $data['key']);
+        $this->db->or_like('nama_customer', $data['key']);
+        $this->db->or_like('tanggal_masuk', $data['key']);
+        $this->db->or_like('status_nota', $data['key']);
+        $this->db->or_like('status_pembayaran', $data['key']);
+        $this->db->group_end();
+    
+        $query = $this->db->get('nota_teknisi');
+        return $query;
+    }
+
+    public function searchTransaksi($data) {
+        $this->db->where('ownerId', $_SESSION['id_user']);
+    
+        // Tambahkan kondisi where untuk rentang tanggal
+        $this->db->where('tanggal_pesanan >=', $data['start']);
+        $this->db->where('tanggal_pesanan <=', $data['end']);
+    
+        // Kondisi like dikelompokkan dengan tanda kurung
+        $this->db->group_start();
+        $this->db->like('no_transaksi', $data['key']);
+        $this->db->or_like('cashier', $data['key']);
+        $this->db->or_like('total_biaya', $data['key']);
+        $this->db->or_like('diskon', $data['key']);
+        $this->db->or_like('metode_pembayaran', $data['key']);
+        $this->db->or_like('status', $data['key']);
+        $this->db->group_end();
+    
+        $query = $this->db->get('transaksi');
+        return $query;
+    }
+
 }

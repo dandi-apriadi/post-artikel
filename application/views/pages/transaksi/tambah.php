@@ -75,8 +75,6 @@ if (isset($message)) {
                 <div class="card">
                     <div class="card-header">Daftar Produk</div>
                     <div class="payment-input">
-                        
-
                                 <div class="col-lg-10 ml-3">
                                     <div>
                                         <div class="row">
@@ -115,9 +113,6 @@ if (isset($message)) {
                                         </form>
                                     </div>
                                 </div>
-
-
-                                
                         </div>
                       
                         <div class="card-body">
@@ -127,14 +122,12 @@ if (isset($message)) {
                         ?>
                         <?php foreach ($barang->result() as $item): ?>
                                     <?php $index++;?>
-
                                     <div class="d-none">
                                         <input type="text" value="<?=$item->nama_barang?>" id="namaBarang-<?=$index?>">
                                         <input type="text" value="<?=$item->harga?>" id="harga-<?=$index?>">
                                         <input type="text" value="<?=$item->id?>" id="barangId-<?=$index?>">
                                     </div>
-
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="card px-2 py-1">
                                             <div class="product-card">
                                                 <img class="product-image" style="height:250px;" src="<?=base_url('assets/images/barang/'.$item->gambar)?>" alt="<?=$item->nama_barang?>">
@@ -158,10 +151,8 @@ if (isset($message)) {
                                             </div>
                                         </div>
                                     </div>
-
                         <?php endforeach; ?>
                         </div>
-
                         <!-- Isi dengan daftar produk -->
                     </div>
                 </div>

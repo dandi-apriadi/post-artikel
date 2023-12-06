@@ -151,6 +151,8 @@ class Nota extends CI_Controller {
 			$statusPembayaran = htmlspecialchars($this->input->post('statusPembayaran'));
 			$statusNota = 'Nota Teknisi dibuat Oleh ' . $data['getUser']->firstname.' '.$data['getUser']->lastname;
 			$invoice = rand().'-'. time();
+			$dataKaryawan = $this->KaryawanModel->getById($_SESSION['id_user']);
+
 			$this->NotaModel->add(array(
 				'no_invoice' => $invoice,
 				'userId' => $_SESSION['id_user'],
@@ -164,7 +166,8 @@ class Nota extends CI_Controller {
 				'harga_service' => $hargaService,
 				'uang_muka' => $uangPanjar,
 				'status_nota' => 'Menunggu Teknisi',
-				'status_pembayaran' => $statusPembayaran
+				'status_pembayaran' => $statusPembayaran,
+				'ownerId' => $dataKaryawan->ownerId
 			));
 			$this->NotaModel->addHistory(array(
 				'no_invoice' => $invoice,
