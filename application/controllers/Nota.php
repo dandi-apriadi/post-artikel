@@ -275,7 +275,7 @@ class Nota extends CI_Controller {
 		$data['invoice'] = $id;
 		$data['lastHistory'] = $this->NotaModel->getLastHistory($id);
 
-        if($data['getKaryawan']->status_karyawan != 'customer service' && $data['getKaryawan']->status_karyawan != 'teknisi')
+        if($data['getKaryawan']->status_karyawan != 'customer service' && $data['getKaryawan']->status_karyawan != 'teknisi' && $data['getNota']->ownerId != $_SESSION['id_user'])
             redirect('dashboard');
 
 		if(isset($_GET['status'])){

@@ -165,8 +165,7 @@ class Kasir extends CI_Controller {
 
     public function scan(){
 		$dataKaryawan = $this->KaryawanModel->getById($_SESSION['id_user']);
-
-        $dataBarang = $this->BarangModel->getById($_POST['kode']);
+        $dataBarang = $this->KasirModel->ScanBarang($_POST['kode'],$dataKaryawan->ownerId);
         if($dataBarang){
           if($dataBarang->stok > 0){
             $dataCache = array(
@@ -174,7 +173,7 @@ class Kasir extends CI_Controller {
                 'nama_barang' => $dataBarang->nama_barang,
                 'jumlah_barang' => 1,
                 'harga_satuan' => $dataBarang->harga,
-                'barangId' => $dataBarang->id
+                'barangId' => $dataBarang->no
             );
             $dataTransaksi = array(
                 'userId' => $_SESSION['id_user'],
@@ -285,7 +284,6 @@ class Kasir extends CI_Controller {
 
     public function searchItem($id){
         $key = $id;
-
         $dataKaryawan = $this->KaryawanModel->getById($_SESSION['id_user']);
         $list = $this->KasirModel->searchBarang($key,$dataKaryawan->ownerId);
 
@@ -304,7 +302,7 @@ class Kasir extends CI_Controller {
                 'stok' => $detail->stok,
                 'harga' => $harga,
                 'hargasistem' => $detail->harga,
-                'id' => $detail->id,
+                'id' => $detail->no,
                 'deskripsi' => $detail->deskripsi
             );
 

@@ -120,9 +120,14 @@ class KasirModel extends CI_Model{
     
     public function getBarang($id) {
         $this->db->where('userId',$id);
-        $this->db->limit(3);
+        $this->db->limit(4);
         $query = $this->db->get('barang');
         return $query;
+    }
+
+    public function scanBarang($id,$owner){
+        $this->db->where('userId', $owner);
+        return $this->db->get_where('barang', array('id' => $id))->row();
     }
     
     public function getDate($type){
@@ -200,11 +205,11 @@ class KasirModel extends CI_Model{
         $barangJumlah = array();
 
         // Ambil data jumlah barang dari tabel barang
-        $barang = $this->db->select('id, stok')->get('barang')->result_array();
+        $barang = $this->db->select('no, stok')->get('barang')->result_array();
 
         // Ubah format data barang untuk kemudahan pencarian
         foreach ($barang as $row) {
-            $barangJumlah[$row['id']] = $row['stok'];
+            $barangJumlah[$row['no']] = $row['stok'];
         }
 
         // Periksa apakah jumlah barang dari cache_transaksi lebih besar atau sama dengan jumlah barang dari tabel barang
@@ -246,6 +251,7 @@ class KasirModel extends CI_Model{
         $this->db->or_like('deskripsi', $key);
         $this->db->or_like('stok', $key);
         $this->db->or_like('id', $key);
+        $this->db->or_like('no', $key);
         $this->db->or_like('harga', $key);
         $this->db->where('userId', $kode_owner);
         $query = $this->db->get('barang');

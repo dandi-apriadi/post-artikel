@@ -5,7 +5,7 @@ class Owner extends CI_Controller {
 
 	public function __construct(){
 		parent::__construct();
-		$this->load->model(['AuthModel', 'OwnerModel']);
+		$this->load->model(['AuthModel', 'OwnerModel','NotaModel','KasirModel']);
 
 		// jika belum login, tdk bisa kesini
 		if (!isset($_SESSION['logged_in'])) {
@@ -168,7 +168,64 @@ class Owner extends CI_Controller {
 	        "data" => $data
 	    );
         echo json_encode($output);
-
 	}
+
+	public function detailNota($id){
+		$data['title'] = "Data Nota";
+		$data['getUser'] = $this->AuthModel->getDataLoggedIn($_SESSION['id_user']);
+		$data['getOwner'] = $this->OwnerModel->getById($_SESSION['id_user']);
+		$data['getNota'] = $this->NotaModel->getById($id);
+		$data['invoice'] = $id;
+		$data['lastHistory'] = $this->NotaModel->getLastHistory($id);
+
+        if($data['getNota']->ownerId != $_SESSION['id_user'])
+            redirect('dashboard');
+
+		$this->load->view('templates/dashboard/head', $data);
+		$this->load->view('templates/dashboard/navbar', $data);
+		$data['sidebar'] = $this->load->view('templates/dashboard/sidebarOwner', $data, true);
+		$this->load->view('pages/nota/detail_owner', $data);
+		$this->load->view('templates/dashboard/footer');
+	}
+
+	public function notaActivity($id){
+		$data['title'] = "Data Nota";
+		$data['getUser'] = $this->AuthModel->getDataLoggedIn($_SESSION['id_user']);
+		$data['getOwner'] = $this->OwnerModel->getById($_SESSION['id_user']);
+		$data['getNota'] = $this->NotaModel->getById($id);
+		$data['invoice'] = $id;
+		$data['getHistory'] = $this->NotaModel->getHistory($id);
+		$data['lastHistory'] = $this->NotaModel->getLastHistory($id);
+
+		if($data['getNota']->ownerId != $_SESSION['id_user'])
+            redirect('dashboard');
+
+		$this->load->view('templates/dashboard/head', $data);
+		$this->load->view('templates/dashboard/navbar', $data);
+		$data['sidebar'] = $this->load->view('templates/dashboard/sidebarOwner', $data, true);
+		$this->load->view('pages/nota/activity', $data);
+		$this->load->view('templates/dashboard/footer');
+	}
+
+	public function detailTransaksi($id){
+		$data['title'] = "Detail Transaksi";
+		$data['getUser'] = $this->AuthModel->getDataLoggedIn($_SESSION['id_user']);
+        $data['detail'] = $this->KasirModel->getDetailTransaction($id);
+        $data['transaksi'] = $this->KasirModel->getTransaction($id);
+        $data['getOwner'] = $this->OwnerModel->getById($_SESSION['id_user']);
+
+		// jika bukan admin yg login, maka tdk bisa kesini
+		if ($data['transaksi']->ownerId != $_SESSION['id_user'])
+			redirect('dashboard');
+
+		$this->load->view('templates/dashboard/head', $data);
+		$this->load->view('templates/dashboard/navbar', $data);
+
+		$data['sidebar'] = $this->load->view('templates/dashboard/sidebarOwner', $data, true);
+		$this->load->view('pages/transaksi/detail', $data);
+
+		$this->load->view('templates/dashboard/footer');
+	}
+	
 
 }

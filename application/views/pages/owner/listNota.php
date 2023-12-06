@@ -80,7 +80,7 @@ if (isset($message)) {
 									<td><?=$item->tanggal_masuk?></td>
 									<td><?=$item->status_nota?></td>
 									<td><?=$item->status_pembayaran?></td>
-									<td><a href="<?php base_url('nota/detail/'.$item->no_invoice);?>" class='btn btn-primary btn-sm'>Detail</a></td>
+									<td><a href="<?php echo base_url('owner/detail-nota/'.$item->no_invoice);?>" class='btn btn-primary btn-sm'>Details</a></td>
 									</tr>   
 								<?php endforeach; ?>
 								</tbody>
@@ -135,8 +135,8 @@ if (isset($message)) {
 								<td>${item.no_invoice}</td>
 								<td>${item.nama_customer}</td>
 								<td>${item.tanggal_masuk}</td>
-								<td>Rp.${item.status_nota}</td>
-								<td>Rp.${item.status_pembayaran}</td>
+								<td>${item.status_nota}</td>
+								<td>${item.status_pembayaran}</td>
 								<td><a href="${item.url}" class='btn btn-primary btn-sm'>Detail</a></td>
 							</tr>   
                             `

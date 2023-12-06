@@ -125,7 +125,7 @@ if (isset($message)) {
                                     <div class="d-none">
                                         <input type="text" value="<?=$item->nama_barang?>" id="namaBarang-<?=$index?>">
                                         <input type="text" value="<?=$item->harga?>" id="harga-<?=$index?>">
-                                        <input type="text" value="<?=$item->id?>" id="barangId-<?=$index?>">
+                                        <input type="text" value="<?=$item->no?>" id="barangId-<?=$index?>">
                                     </div>
                                     <div class="col-md-6">
                                         <div class="card px-2 py-1">
@@ -314,13 +314,12 @@ if (isset($message)) {
                 dataType: 'json',
                 data: {},
                 success: function(response) {
-                    // alert("berhasil Data yang diambil : "+response.data)
                     $("#list-item").empty();
                     $.each(response.data, function(index, item) {
                         index++;
                         setTimeout(function () {
                         search.value = "";
-                        }, 1000);
+                        }, 2000);
                         // Tambahkan baris HTML untuk setiap elemen
                         $("#list-item").append(
                             `
@@ -347,7 +346,7 @@ if (isset($message)) {
                                             </div>
                                         </div>
                                         <div class="row justify-content-center">
-                                            <div class="col-md-4 mt-2 mb-2">
+                                            <div class="mt-2 mb-2">
                                                 <button onclick="button(${index});" id="button-${index}" class="btn btn-primary btn-block mt-1">Tambah</button>
                                             </div>
                                         </div>

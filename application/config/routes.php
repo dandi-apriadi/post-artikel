@@ -36,7 +36,10 @@ $route['barang/search/(:any)'] = 'Barang/searchItem/$1';
 //owner
 $route['owner/list'] = 'Owner/list';
 $route['owner/list-transaksi'] = 'Owner/listTransaksi';
+$route['owner/detail-transaksi/(:any)'] = 'Owner/detailTransaksi/$1';
 $route['owner/list-nota'] = 'Owner/listNota';
+$route['owner/detail-nota/(:any)'] = 'Owner/detailNota/$1';
+$route['owner/nota-activity/(:any)'] = 'Owner/notaActivity/$1';
 
 //kasir
 $route['kasir/add'] = 'Kasir/tambah';
