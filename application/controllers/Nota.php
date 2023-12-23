@@ -103,7 +103,7 @@ class Nota extends CI_Controller {
 		$data['getUser'] = $this->AuthModel->getDataLoggedIn($_SESSION['id_user']);
 		$data['getKaryawan'] = $this->KaryawanModel->getById($_SESSION['id_user']);
 
-        if($data['getKaryawan']->status_karyawan != 'customer service')
+        if($data['getKaryawan']->status_karyawan != 'customer service' && $data['getKaryawan']->status_karyawan != 'teknisi')
             redirect('dashboard');
 
 		$this->form_validation->set_rules('namaCustomer', '', 'required', array(
@@ -152,7 +152,11 @@ class Nota extends CI_Controller {
 			$statusNota = 'Nota Teknisi dibuat Oleh ' . $data['getUser']->firstname.' '.$data['getUser']->lastname;
 			$invoice = rand().'-'. time();
 			$dataKaryawan = $this->KaryawanModel->getById($_SESSION['id_user']);
-
+			if($dataKaryawan->status_karyawan == 'teknisi'){
+				$teknisiId = $_SESSION['id_user'];
+			}else{
+				$teknisiId = 0;
+			}
 			$this->NotaModel->add(array(
 				'no_invoice' => $invoice,
 				'userId' => $_SESSION['id_user'],
@@ -160,6 +164,7 @@ class Nota extends CI_Controller {
 				'no_hp' => $noHp,
 				'alamat' => $alamat,
 				'nama_barang' => $namaBarang,
+				'teknisiId' => $teknisiId,
 				'serial_number' => $imei,
 				'kerusakan' => $kerusakan,
 				'perbaikan' => $perbaikan,
@@ -179,8 +184,11 @@ class Nota extends CI_Controller {
 				text: "Nota telah dibuat",
 				icon: "success",})</script>'
 			);
-
-            redirect('nota/list');
+			if($data['getKaryawan']->status_karyawan == 'teknisi'){
+			redirect('nota/working-list');
+			}elseif($data['getKaryawan']->status_karyawan == 'customer service'){
+				redirect('nota/list');
+			}
 		}else{
 			$this->load->view('templates/dashboard/head', $data);
 			$this->load->view('templates/dashboard/navbar', $data);

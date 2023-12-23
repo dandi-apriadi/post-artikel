@@ -90,7 +90,7 @@ if (isset($message)) {
                             <?=$getOwner->nama_toko?>
                         </div>
                         <div class="follow-text">
-                            Follow us on Instagram or Facebook: @sutan.service
+                            Follow us on Instagram or Facebook: -
                         </div>
 
                         <div class="divider"></div>

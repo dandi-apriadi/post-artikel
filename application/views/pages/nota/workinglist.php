@@ -14,14 +14,20 @@ if (isset($message)) {
 <div class="wrapper">
   <!-- Sidebar -->
   <?= $sidebar ?>
-
   	<!-- Content Wrapper. Contains page content -->
   	<div class="content-wrapper pb-3">
 	    <section class="content">
 	    	<div class="container-fluid">
-	    		
+					
 		    	<div class="card">
               <div class="card-body">
+			  <div class="row">
+						<div class="col-md-12 text-right">
+							<div class="ml-2 mt-4">
+								<a href="<?=base_url('nota/add');?>" class="btn btn-primary">Tambah</a>
+							</div>
+						</div>
+					</div>
                   <h3>Data Nota</h3>
                   <div>Dibawah ini adalah data nota yang pernah dibuat</div><hr/>
                   <table id="table" class="table text-sm text-center table-bordered table-striped">

@@ -50,6 +50,14 @@ if (isset($message)) {
 													</div>
 												</div>
 											</div>
+											
+											<div class="row">
+												<div class="col-md-12 text-right">
+													<div class="ml-2 mt-4">
+														<a href="<?=base_url('owner/add-nota');?>" class="btn btn-primary">Tambah</a>
+													</div>
+												</div>
+											</div>
 										</form>
 									</div>
 								</div>
@@ -67,22 +75,6 @@ if (isset($message)) {
 									</tr>
 								</thead>
 								<tbody id="list-nota">
-								<?php
-								$index = 0;
-								foreach ($list as $item): ?>
-								<?php $index++;
-								    $rowColorClass = ($index % 2 == 0) ? 'background-color: #FFFFFF;' : 'background-color: #F2F2F2;';
-								?>
-									<tr style="<?=$rowColorClass?>">
-															<td><?=$index?></td>
-									<td><?=$item->no_invoice?></td>
-									<td><?=$item->nama_customer?></td>
-									<td><?=$item->tanggal_masuk?></td>
-									<td><?=$item->status_nota?></td>
-									<td><?=$item->status_pembayaran?></td>
-									<td><a href="<?php echo base_url('owner/detail-nota/'.$item->no_invoice);?>" class='btn btn-primary btn-sm'>Details</a></td>
-									</tr>   
-								<?php endforeach; ?>
 								</tbody>
 							</table>
 							</div>
@@ -100,6 +92,10 @@ if (isset($message)) {
 	var Search = document.getElementById("searchbar");
 	var Start = document.getElementById("date1");
 	var End = document.getElementById("date2");
+
+	document.addEventListener('DOMContentLoaded', function() {
+		search();
+	});
 
 	Search.addEventListener('keyup', function (event) {
 		search();

@@ -252,7 +252,7 @@ class OwnerModel extends CI_Model{
         $this->db->or_like('total_biaya', $data['key']);
         $this->db->or_like('diskon', $data['key']);
         $this->db->or_like('metode_pembayaran', $data['key']);
-        $this->db->or_like('status', $data['key']);
+        $this->db->where('status', 'submitted');
         $this->db->group_end();
     
         $query = $this->db->get('transaksi');

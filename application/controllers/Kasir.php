@@ -5,7 +5,7 @@ class Kasir extends CI_Controller {
 
 	public function __construct(){
 		parent::__construct();
-		$this->load->model(['AuthModel', 'KasirModel', 'KaryawanModel', 'BarangModel','OwnerModel']);
+		$this->load->model(['AuthModel', 'KasirModel', 'KaryawanModel', 'BarangModel','OwnerModel','NotaModel']);
 		// jika belum login, tdk bisa kesini
 		if (!isset($_SESSION['logged_in'])) {
 			redirect('/');
@@ -193,18 +193,15 @@ class Kasir extends CI_Controller {
 			'harga_satuan' => $this->input->post('harga'),
 			'barangId' => $this->input->post('barangId')
 		);
-
 		$dataTransaksi = array(
             'userId' => $_SESSION['id_user'],
             'status' => 'draft',
             'ownerId' => $dataKaryawan->ownerId
         );
-		
         $this->KasirModel->addcache($dataCache,$dataTransaksi);
 	}
 
     public function cache_transaksi(){
-
 		$list = $this->KasirModel->getcache();
 		$data = array();
         $totalBiaya = 0;
@@ -289,9 +286,11 @@ class Kasir extends CI_Controller {
 		$data = array();
         $totalBiaya = 0;
         foreach($list->result() as $detail){
+
             if($detail->userId != $dataKaryawan->ownerId){
                 continue;
             }
+
             $harga = number_format($detail->harga, 0, '.', ',');
             $gambar = base_url('assets/images/barang/'.$detail->gambar);
 			$row = array();
@@ -311,6 +310,7 @@ class Kasir extends CI_Controller {
         $output = array(
 	        "data" => $data
 	    );
+
         echo json_encode($output);
     }
 
@@ -320,6 +320,7 @@ class Kasir extends CI_Controller {
 		$data['getKaryawan'] = $this->KaryawanModel->getById($_SESSION['id_user']);
         $data['startDate'] = $this->KasirModel->getDate("min");
         $data['endDate'] = $this->KasirModel->getDate("max");
+
         if($data['getKaryawan']->status_karyawan != 'cashier')
             redirect('dashboard');
 
@@ -349,10 +350,16 @@ class Kasir extends CI_Controller {
 			$row[] = rupiah($transaksi->diskon);
 			$row[] = $transaksi->status;
 			
-			$row[] = "
+            if($transaksi->status == 'submitted'){
+                $row[] = "
             	<a href='".base_url('kasir/detail-transaksi/'.$transaksi->no_transaksi)."' class='btn btn-primary btn-sm'>Detail</a>
             ";
-
+            }elseif($transaksi->status == 'draft'){
+                $row[] = "
+            	<a href='".base_url('kasir/delete-draft/'.$transaksi->userId)."' class='btn btn-danger btn-sm'>Delete</a>
+            ";
+            }
+			
 			$data[] = $row;
 
 		}
@@ -365,6 +372,159 @@ class Kasir extends CI_Controller {
 	    );
 
 	    //output to json format
+        echo json_encode($output);
+	}
+
+    public function deleteDraft($id){
+        $this->KasirModel->deleteDraft($id);
+        $this->session->set_flashdata('msg_sweetalert', '<script>Swal.fire({
+            title: "Berhasil",
+            text: "Transaksi diHapus",
+            icon: "success",})</script>'
+            );
+        redirect('/kasir/list');
+    }
+
+
+    public function addNota(){
+		$data['title'] = "Tambah Nota";
+		$data['getUser'] = $this->AuthModel->getDataLoggedIn($_SESSION['id_user']);
+		$data['getKaryawan'] = $this->KaryawanModel->getById($_SESSION['id_user']);
+
+		// jika bukan admin yg login, maka tdk bisa kesini
+        if($data['getKaryawan']->status_karyawan != 'cashier')
+            redirect('dashboard');
+
+			$this->form_validation->set_rules('namaCustomer', '', 'required', array(
+				'required' => 'Tidak boleh kosong',
+			));
+			$this->form_validation->set_rules('noHp', '', 'required', array(
+				'required' => 'Tidak boleh kosong',
+			));
+			$this->form_validation->set_rules('alamat', '', 'required', array(
+				'required' => 'Tidak boleh kosong',
+			));
+			$this->form_validation->set_rules('namaBarang', '', 'required', array(
+				'required' => 'Tidak boleh kosong',
+			));
+			$this->form_validation->set_rules('imei', '', 'required', array(
+				'required' => 'Tidak boleh kosong',
+			));
+			$this->form_validation->set_rules('kerusakan', '', 'required', array(
+				'required' => 'Tidak boleh kosong',
+			));
+			$this->form_validation->set_rules('hargaService', '', 'required', array(
+				'required' => 'Tidak boleh kosong',
+			));
+			$this->form_validation->set_rules('uangPanjar', '', 'required', array(
+				'required' => 'Tidak boleh kosong',
+			));
+			$this->form_validation->set_rules('perbaikan', '', 'required', array(
+				'required' => 'Tidak boleh kosong',
+			));
+			$this->form_validation->set_rules('keterangan', '', 'required', array(
+				'required' => 'Tidak boleh kosong',
+			));
+			
+			if($this->form_validation->run()){
+				$namaCustomer = htmlspecialchars($this->input->post('namaCustomer'));
+				$noHp = htmlspecialchars($this->input->post('noHp'));
+				$alamat = htmlspecialchars($this->input->post('alamat'));
+				$namaBarang = htmlspecialchars($this->input->post('namaBarang'));
+				$imei = htmlspecialchars($this->input->post('imei'));
+				$kerusakan = nl2br($this->input->post('kerusakan'));
+				$hargaService = htmlspecialchars($this->input->post('hargaService'));
+				$uangPanjar = htmlspecialchars($this->input->post('uangPanjar'));
+				$perbaikan = htmlspecialchars($this->input->post('perbaikan'));
+				$keterangan = nl2br($this->input->post('keterangan'));
+				$statusPembayaran = htmlspecialchars($this->input->post('statusPembayaran'));
+				$statusNota = 'Nota Teknisi dibuat Oleh ' . $data['getUser']->firstname.' '.$data['getUser']->lastname;
+				$invoice = rand().'-'. time();
+                $dataKaryawan = $this->KaryawanModel->getById($_SESSION['id_user']);
+	
+				$this->NotaModel->add(array(
+					'no_invoice' => $invoice,
+					'userId' => $_SESSION['id_user'],
+					'nama_customer' => $namaCustomer,
+					'no_hp' => $noHp,
+					'alamat' => $alamat,
+					'nama_barang' => $namaBarang,
+					'serial_number' => $imei,
+					'kerusakan' => $kerusakan,
+					'perbaikan' => $perbaikan,
+					'harga_service' => $hargaService,
+					'uang_muka' => $uangPanjar,
+					'status_nota' => 'Menunggu Teknisi',
+					'status_pembayaran' => $statusPembayaran,
+					'ownerId' => $dataKaryawan->ownerId
+				));
+				$this->NotaModel->addHistory(array(
+					'no_invoice' => $invoice,
+					'status' => $statusNota,
+					'keterangan' => $keterangan
+				));
+				$this->session->set_flashdata('msg_sweetalert', '<script>Swal.fire({
+					title: "Berhasil",
+					text: "Nota telah dibuat",
+					icon: "success",})</script>'
+				);
+				redirect('kasir/list-nota');
+			}else{
+				$this->load->view('templates/dashboard/head', $data);
+				$this->load->view('templates/dashboard/navbar', $data);
+				$data['sidebar'] = $this->load->view('templates/dashboard/sidebarkaryawan', $data, true);
+				$this->load->view('pages/nota/add', $data);
+				$this->load->view('templates/dashboard/footer');
+			}
+	}
+
+    public function listNota(){
+		$data['title'] = "Data Nota";
+		$data['getUser'] = $this->AuthModel->getDataLoggedIn($_SESSION['id_user']);
+		$data['getKaryawan'] = $this->KaryawanModel->getById($_SESSION['id_user']);
+
+		// jika bukan admin yg login, maka tdk bisa kesini
+		if ($data['getUser']->role != 'karyawan')
+			redirect('dashboard');
+
+		$this->load->view('templates/dashboard/head', $data);
+		$this->load->view('templates/dashboard/navbar', $data);
+		$data['list'] = $this->OwnerModel->showTransaction('nota_teknisi');
+		$data['date1'] = $this->KasirModel->getDateNota('min','nota_teknisi');
+		$data['date2'] = $this->KasirModel->getDateNota('max','nota_teknisi');
+		$data['sidebar'] = $this->load->view('templates/dashboard/sidebarkaryawan', $data, true);
+		$this->load->view('pages/transaksi/listNota', $data);
+		$this->load->view('templates/dashboard/footer');
+	}
+
+    public function searchNota(){
+        $key = $this->input->post('key');
+		$start = $this->input->post('start');
+		$end = $this->input->post('end');
+
+        $list = $this->KasirModel->searchNota(array('key' => $key,'start' => $start,'end' => $end));
+		$data = array();
+        $no = 0;
+        foreach($list->result() as $detail){
+			$no++;
+			$rowColorClass = ($no % 2 == 0) ? 'background-color: #FFFFFF;' : 'background-color: #F2F2F2;';
+			$row = array();
+            $row = array(
+				'no' => $no,
+				'color' => $rowColorClass,
+                'no_invoice' => $detail->no_invoice,
+                'nama_customer' => $detail->nama_customer,
+                'tanggal_masuk' => $detail->tanggal_masuk,
+                'status_nota' => $detail->status_nota,
+                'status_pembayaran' => $detail->status_pembayaran,
+            );
+
+            $data[] = $row;
+		}
+        
+        $output = array(
+	        "data" => $data
+	    );
         echo json_encode($output);
 	}
 

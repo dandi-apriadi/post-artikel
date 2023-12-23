@@ -91,6 +91,13 @@ class KasirModel extends CI_Model{
         }
     }
     
+    public function deleteDraft($userId){
+        $this->db->where('userId', $userId);
+        $this->db->delete('cache_transaksi');
+        $this->db->where('userId', $userId);
+        $this->db->where('status', 'draft');
+        $this->db->delete('transaksi');
+    }
 
     public function addcache($dataCache = array(), $dataTransaksi = array()) {
         // Cek apakah user ID sudah ada di tabel transaksi
@@ -315,6 +322,7 @@ class KasirModel extends CI_Model{
 
     public function countAllTransasction(){
         $this->db->where('userId', $_SESSION['id_user']);
+        $this->db->where('status', 'submitted');
         $query = $this->db->get('transaksi');
         // Kembalikan jumlah baris
         return $query->num_rows();
@@ -350,6 +358,60 @@ class KasirModel extends CI_Model{
             return $result->result();
         } else {
             return array();
+        }
+    }
+
+   
+    public function searchNota($data) {
+        $this->db->where('ownerId', 34);
+        $date1 = str_replace('T', ' ', $data['start']);
+        $date2 = str_replace('T', ' ', $data['end']);
+
+        // Tambahkan kondisi where untuk rentang tanggal
+        $this->db->where('tanggal_masuk >=', $date1);
+        $this->db->where('tanggal_masuk <=', $date2);
+    
+        // Kondisi like dikelompokkan dengan tanda kurung
+        $this->db->group_start();
+        $this->db->like('no_invoice', $data['key']);
+        $this->db->or_like('nama_customer', $data['key']);
+        $this->db->or_like('tanggal_masuk', $data['key']);
+        $this->db->or_like('status_nota', $data['key']);
+        $this->db->or_like('status_pembayaran', $data['key']);
+        $this->db->group_end();
+    
+        $query = $this->db->get('nota_teknisi');
+        return $query;
+    }
+
+    public function getDateNota($type,$table){
+        if($table == "nota_teknisi"){
+            $field = "tanggal_masuk";
+        }elseif($table == "transaksi"){
+            $field = "tanggal_pesanan";
+        }
+        if($type == 'min'){
+            $this->db->where('userId',$_SESSION['id_user']);
+            $this->db->select_min($field, 'earliest_date');
+            $query = $this->db->get($table);
+    
+            // Periksa apakah query berhasil
+            if ($query->num_rows() > 0) {
+                return $query->row()->earliest_date;
+            } else {
+                return null;
+            }
+        }elseif($type == 'max'){
+            $this->db->where('userId',$_SESSION['id_user']);
+            $this->db->select_max($field, 'latest_date');
+            $query = $this->db->get($table);
+
+            // Periksa apakah query berhasil dieksekusi
+            if ($query->num_rows() > 0) {
+                return $query->row()->latest_date;
+            } else {
+                return null;
+            }
         }
     }
 

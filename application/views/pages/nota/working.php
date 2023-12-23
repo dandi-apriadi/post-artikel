@@ -44,6 +44,8 @@ if (isset($message)) {
                             Update</button>
                         </div>
                     </div>
+                    <hr>
+                    
                     <div class="<?php if($getNota->status_nota == 'Selesai' || $getNota->status_nota == 'dibatalkan'){echo "d-none";}?>">
                         <div class="form-group">
                             <label for="kondisi">Kondisi Barang:</label>
@@ -209,7 +211,7 @@ if (isset($message)) {
                                         <div>- Semua perlengkapan & Acc dibawa pulang</div>
                                         <div>- Pengambilan Barang harus disertai dengan <span style="color: red;">nota</span></div>
                                         <div>- Barang yang sudah dikonfirmasi selesai oleh tim ${response.namaToko} Service harap segera di ambil</div>
-                                        <div>- Barang yang sudah lewat 3 bulan setelah diperbaiki & tidak diambil, tim Sutan Service berhak untuk melelang sebagai penggantian biaya service</div>
+                                        <div>- Barang yang sudah lewat 3 bulan setelah diperbaiki & tidak diambil, tim ${response.namaToko} berhak untuk melelang sebagai penggantian biaya service</div>
                                     </div>
 
                                     <div id="payment" class="mt-3">

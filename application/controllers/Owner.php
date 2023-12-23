@@ -92,7 +92,7 @@ class Owner extends CI_Controller {
         foreach($list->result() as $detail){
 			$no++;
 			$rowColorClass = ($no % 2 == 0) ? 'background-color: #FFFFFF;' : 'background-color: #F2F2F2;';
-			$url = base_url('kasir/detail-transaksi/'.$detail->no_transaksi);
+			$url = base_url('owner/detail-transaksi/'.$detail->no_transaksi);
             $total_bayar = number_format($detail->total_biaya, 0, '.', ',');
             $diskon = number_format($detail->diskon, 0, '.', ',');
 			$row = array();
@@ -225,6 +225,100 @@ class Owner extends CI_Controller {
 		$this->load->view('pages/transaksi/detail', $data);
 
 		$this->load->view('templates/dashboard/footer');
+	}
+
+	public function addNota(){
+		$data['title'] = "Tambah Nota";
+		$data['getUser'] = $this->AuthModel->getDataLoggedIn($_SESSION['id_user']);
+
+		// jika bukan admin yg login, maka tdk bisa kesini
+		if ($data['getUser']->role != 'owner')
+			redirect('dashboard');
+
+			$this->form_validation->set_rules('namaCustomer', '', 'required', array(
+				'required' => 'Tidak boleh kosong',
+			));
+			$this->form_validation->set_rules('noHp', '', 'required', array(
+				'required' => 'Tidak boleh kosong',
+			));
+			$this->form_validation->set_rules('alamat', '', 'required', array(
+				'required' => 'Tidak boleh kosong',
+			));
+			$this->form_validation->set_rules('namaBarang', '', 'required', array(
+				'required' => 'Tidak boleh kosong',
+			));
+			$this->form_validation->set_rules('imei', '', 'required', array(
+				'required' => 'Tidak boleh kosong',
+			));
+			$this->form_validation->set_rules('kerusakan', '', 'required', array(
+				'required' => 'Tidak boleh kosong',
+			));
+			$this->form_validation->set_rules('hargaService', '', 'required', array(
+				'required' => 'Tidak boleh kosong',
+			));
+			$this->form_validation->set_rules('uangPanjar', '', 'required', array(
+				'required' => 'Tidak boleh kosong',
+			));
+			$this->form_validation->set_rules('perbaikan', '', 'required', array(
+				'required' => 'Tidak boleh kosong',
+			));
+			$this->form_validation->set_rules('keterangan', '', 'required', array(
+				'required' => 'Tidak boleh kosong',
+			));
+			
+			if($this->form_validation->run()){
+				$namaCustomer = htmlspecialchars($this->input->post('namaCustomer'));
+				$noHp = htmlspecialchars($this->input->post('noHp'));
+				$alamat = htmlspecialchars($this->input->post('alamat'));
+				$namaBarang = htmlspecialchars($this->input->post('namaBarang'));
+				$imei = htmlspecialchars($this->input->post('imei'));
+				$kerusakan = nl2br($this->input->post('kerusakan'));
+				$hargaService = htmlspecialchars($this->input->post('hargaService'));
+				$uangPanjar = htmlspecialchars($this->input->post('uangPanjar'));
+				$perbaikan = htmlspecialchars($this->input->post('perbaikan'));
+				$keterangan = nl2br($this->input->post('keterangan'));
+				$statusPembayaran = htmlspecialchars($this->input->post('statusPembayaran'));
+				$statusNota = 'Nota Teknisi dibuat Oleh ' . $data['getUser']->firstname.' '.$data['getUser']->lastname;
+				$invoice = rand().'-'. time();
+	
+				$this->NotaModel->add(array(
+					'no_invoice' => $invoice,
+					'userId' => $_SESSION['id_user'],
+					'nama_customer' => $namaCustomer,
+					'no_hp' => $noHp,
+					'alamat' => $alamat,
+					'nama_barang' => $namaBarang,
+					'serial_number' => $imei,
+					'kerusakan' => $kerusakan,
+					'perbaikan' => $perbaikan,
+					'harga_service' => $hargaService,
+					'uang_muka' => $uangPanjar,
+					'status_nota' => 'Menunggu Teknisi',
+					'status_pembayaran' => $statusPembayaran,
+					'ownerId' => $_SESSION['id_user']
+				));
+				$this->NotaModel->addHistory(array(
+					'no_invoice' => $invoice,
+					'status' => $statusNota,
+					'keterangan' => $keterangan
+				));
+				$this->session->set_flashdata('msg_sweetalert', '<script>Swal.fire({
+					title: "Berhasil",
+					text: "Nota telah dibuat",
+					icon: "success",})</script>'
+				);
+	
+				redirect('owner/list-nota');
+			}else{
+				$this->load->view('templates/dashboard/head', $data);
+				$this->load->view('templates/dashboard/navbar', $data);
+		
+				$data['sidebar'] = $this->load->view('templates/dashboard/sidebarOwner', $data, true);
+				$this->load->view('pages/nota/add', $data);
+		
+				$this->load->view('templates/dashboard/footer');
+			}
+
 	}
 	
 

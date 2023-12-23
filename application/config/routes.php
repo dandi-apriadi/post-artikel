@@ -40,12 +40,16 @@ $route['owner/detail-transaksi/(:any)'] = 'Owner/detailTransaksi/$1';
 $route['owner/list-nota'] = 'Owner/listNota';
 $route['owner/detail-nota/(:any)'] = 'Owner/detailNota/$1';
 $route['owner/nota-activity/(:any)'] = 'Owner/notaActivity/$1';
+$route['owner/add-nota'] = 'Owner/addNota';
 
 //kasir
 $route['kasir/add'] = 'Kasir/tambah';
 $route['kasir/delete-cache/(:num)'] = 'Kasir/deleteCache/$1';
 $route['kasir/detail-transaksi/(:any)'] = 'Kasir/detailTransaksi/$1';
 $route['kasir/list'] = 'Kasir/list';
+$route['kasir/delete-draft/(:any)'] = 'Kasir/deleteDraft/$1';
+$route['kasir/add-nota'] = 'Kasir/addNota';
+$route['kasir/list-nota'] = 'Kasir/listNota';
 
 //customer service
 $route['nota/add'] = 'Nota/add';

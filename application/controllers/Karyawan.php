@@ -284,7 +284,6 @@ class Karyawan extends CI_Controller {
 		$start = date('Y-m-d', strtotime(str_replace('-', '/', $this->input->post('start'))));
 		$end = date('Y-m-d', strtotime(str_replace('-', '/', $this->input->post('end'))));
 
-
         $list = $this->KaryawanModel->searchTransaksi(array('key' => $key,'start' => $start,'end' => $end));
 		$data = array();
         $no = 0;

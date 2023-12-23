@@ -143,7 +143,7 @@ class Barang extends CI_Controller {
 
             $config['upload_path']   = 'assets/images/barang/';
             $config['allowed_types'] = 'jpg|png|jpeg';
-            $config['max_size']      = 3000000; // 3mb
+            $config['max_size']      = 5000000; // 3mb
             $config['file_name']     = time() . '_' . rand();
             $this->load->library('upload', $config);
          
@@ -230,12 +230,12 @@ class Barang extends CI_Controller {
     public function checkThumbnail($str){
         $allowed_mime_type_arr = array('image/jpeg', 'image/png');
         $mime = get_mime_by_extension($_FILES['customFile']['name']);
-        $maxsize = 3000000; // 3 mb
+        $maxsize = 5000000; // 3 mb
  
         if (isset($_FILES['customFile']['name']) && $_FILES['customFile']['name'] != "") {
             if (in_array($mime, $allowed_mime_type_arr)) {
                 if ($_FILES['customFile']['size'] >= $maxsize) {
-                    $this->form_validation->set_message('checkThumbnail', 'Terlalu besar. Maximal 3 MB');
+                    $this->form_validation->set_message('checkThumbnail', 'Terlalu besar. Maximal 5 MB');
                     return false;
                 }else{
                     return true;
@@ -256,7 +256,7 @@ class Barang extends CI_Controller {
         if (!empty($customFile['name'])) {
             $config['upload_path']   = 'assets/images/barang/';
             $config['allowed_types'] = 'jpg|png|jpeg';
-            $config['max_size']      = 3000000; // 3mb
+            $config['max_size']      = 5000000; // 3mb
             $config['file_name']     = time() . '_' . rand(); // random filename
             $this->load->library('upload', $config);
         
@@ -324,12 +324,12 @@ class Barang extends CI_Controller {
     public function checkGambar($str){
         $allowed_mime_type_arr = array('image/jpeg', 'image/png');
         $mime = get_mime_by_extension($_FILES['gambar']['name']);
-        $maxsize = 3000000; // 3 mb
+        $maxsize = 5000000; // 3 mb
  
         if (isset($_FILES['gambar']['name']) && $_FILES['gambar']['name'] != "") {
             if (in_array($mime, $allowed_mime_type_arr)) {
                 if ($_FILES['gambar']['size'] >= $maxsize) {
-                    $this->form_validation->set_message('checkGambar', 'Terlalu besar. Maximal 3 MB');
+                    $this->form_validation->set_message('checkGambar', 'Terlalu besar. Maximal 5 MB');
                     return false;
                 }else{
                     return true;

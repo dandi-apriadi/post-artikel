@@ -69,24 +69,7 @@ if (isset($message)) {
 									</tr>
 								</thead>
 								<tbody id="list-transaksi">
-								<?php
-								$index = 0;
-								foreach ($list as $item): ?>
-								<?php $index++;
-								    $rowColorClass = ($index % 2 == 0) ? 'background-color: #FFFFFF;' : 'background-color: #F2F2F2;';
-								?>
-									<tr style="<?=$rowColorClass?>">
-															<td><?=$index?></td>
-									<td><?=$item->no_transaksi?></td>
-									<td><?=$item->cashier?></td>
-									<td><?=$item->tanggal_pesanan?></td>
-									<td>Rp.<?=number_format($item->total_biaya, 0, '.', ',');?></td>
-									<td>Rp.<?=number_format($item->diskon, 0, '.', ',');?></td>
-									<td><?=$item->metode_pembayaran?></td>
-									<td><?=$item->status?></td>
-									<td><a href="<?php echo base_url('owner/detail-transaksi/'.$item->no_transaksi);?>" class='btn btn-primary btn-sm'>Detail</a></td>
-									</tr>   
-								<?php endforeach; ?>
+								
 								</tbody>
 							</table>
 							</div>
@@ -96,14 +79,16 @@ if (isset($message)) {
           </div>
         </div>
       </section>
-	  
     </div>
-
 	
 <script>
 	var Search = document.getElementById("searchbar");
 	var Start = document.getElementById("date1");
 	var End = document.getElementById("date2");
+
+	document.addEventListener('DOMContentLoaded', function() {
+		search();
+	});
 
 	Search.addEventListener('keyup', function (event) {
 		search();

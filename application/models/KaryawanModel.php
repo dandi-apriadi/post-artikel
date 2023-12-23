@@ -130,6 +130,7 @@ class KaryawanModel extends CI_Model{
         // Tambahkan kondisi where untuk rentang tanggal
         $this->db->where('tanggal_pesanan >=', $data['start']);
         $this->db->where('tanggal_pesanan <=', $data['end']);
+        $this->db->where('status', 'submitted');
     
         // Kondisi like dikelompokkan dengan tanda kurung
         $this->db->group_start();
@@ -138,7 +139,6 @@ class KaryawanModel extends CI_Model{
         $this->db->or_like('total_biaya', $data['key']);
         $this->db->or_like('diskon', $data['key']);
         $this->db->or_like('metode_pembayaran', $data['key']);
-        $this->db->or_like('status', $data['key']);
         $this->db->group_end();
     
         $query = $this->db->get('transaksi');

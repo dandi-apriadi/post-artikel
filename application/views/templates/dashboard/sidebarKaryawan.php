@@ -49,6 +49,10 @@
               <i class="fas fa-receipt nav-icon"></i> 
                 <p>Data Transaksi</p>
               </a>
+              <a href="<?= base_url('kasir/list-nota') ?>" class="nav-link">
+              <i class="fas fa-receipt nav-icon"></i> 
+                <p>Data Nota</p>
+              </a>
             </li>
           </ul>
         </li>

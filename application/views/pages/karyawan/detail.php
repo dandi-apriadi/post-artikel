@@ -36,8 +36,15 @@ if (isset($message)) {
                             </label>
                             <div class="card-body text-center">
                                 <h5 class="card-title"><?=$user->firstname?> <?=$user->lastname?></h5> <br><hr>
-                                <input type="text" value="<?=$karyawan->status_karyawan?>" class="d-none" name="jabatan">
-                                <p class="card-text"><?=$karyawan->status_karyawan?></p>
+
+                                <label for="status">Jabatan:</label>
+                                    <select name="jabatan" class="form-control" id="status">
+                                        <option value='<?=$karyawan->status_karyawan?>'><?=$karyawan->status_karyawan?></option>
+                                        <option disabled>---------------</option>
+                                        <option value='teknisi'>teknisi</option>
+                                        <option value='cashier'>cashier</option>
+                                        <option value='customer service'>customer service</option>
+                                    </select>
                             </div>
                         </div>
                         <div class="card mt-3">
