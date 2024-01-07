@@ -6,66 +6,35 @@ $route['dashboard'] = 'Dashboard';
 $route['change-pass'] = 'Dashboard/change_pass';
 $route['logout'] = 'Dashboard/logout';
 $route['working'] = 'Dashboard/working';
-$route['testing'] = 'Dashboard/testing';
+$route['profile'] = 'Dashboard/profile';
+$route['inactive'] = 'Dashboard/inactive';
 
+//homepage
+$route['testing'] = 'Homepage/testing';
 $route['default_controller'] = 'Homepage';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+$route['about'] = 'Homepage/about';
+$route['artikels'] = 'Homepage/artikels';
+$route['kontak'] = 'Homepage/kontak';
+$route['support'] = 'Homepage/support';
+$route['login'] = 'Homepage/login';
+$route['artikel/(:any)'] = 'Homepage/artikel/$1';
+$route['registrasi'] = 'Homepage/register';
+$route['verification/(:any)'] = 'Homepage/verification/$1';
+$route['forgotpass'] = 'Homepage/forgot';
+$route['new-password/(:any)'] = 'Homepage/newPassword/$1';
 
-//Register
-$route['register'] = 'Register';
-$route['verification'] = 'Register/verify';
+//Artikel
+$route['artikel'] = 'Artikel';
+$route['artikel-template/(:any)'] = 'Artikel/template/$1';
+$route['artikel-create/(:any)'] = 'Artikel/create/$1';
+$route['artikel-edit/(:any)'] = 'Artikel/editing/$1';
 
-//Karyawan
-$route['karyawan/add-karyawan'] = 'Karyawan/addKaryawan';
-$route['karyawan/list'] = 'Karyawan/list';
-$route['karyawan/edit/(:num)'] = 'Karyawan/edit/$1';
-$route['karyawan/delete/(:num)'] = 'Karyawan/delete/$1';
-$route['karyawan/deletedata/(:num)'] = 'Karyawan/deleteData/$1';
-$route['karyawan/searchTransaksi'] = 'Karyawan/searchTransaksi';
+//support 
+$route['support-bank'] = 'Support/bank';
+$route['support-crypto'] = 'Support/crypto';
 
-//barang
-$route['barang/daftar-barang'] = 'Barang';
-$route['barang/add'] = 'Barang/add';
-$route['barang/create'] = 'Barang/create';
-$route['barang/edit-barang'] = 'Barang/edit';
-$route['barang/detail/(:num)'] = 'Barang/detail/$1';
-$route['barang/search/(:any)'] = 'Barang/searchItem/$1';
-$route['barang/add-proses/(:any)'] = 'Barang/addProses/$1';
-
-//owner
-$route['owner/list'] = 'Owner/list';
-$route['owner/list-transaksi'] = 'Owner/listTransaksi';
-$route['owner/detail-transaksi/(:any)'] = 'Owner/detailTransaksi/$1';
-$route['owner/list-nota'] = 'Owner/listNota';
-$route['owner/detail-nota/(:any)'] = 'Owner/detailNota/$1';
-$route['owner/nota-activity/(:any)'] = 'Owner/notaActivity/$1';
-$route['owner/add-nota'] = 'Owner/addNota';
-
-//kasir
-$route['kasir/add'] = 'Kasir/tambah';
-$route['kasir/delete-cache/(:num)'] = 'Kasir/deleteCache/$1';
-$route['kasir/detail-transaksi/(:any)'] = 'Kasir/detailTransaksi/$1';
-$route['kasir/list'] = 'Kasir/list';
-$route['kasir/delete-draft/(:any)'] = 'Kasir/deleteDraft/$1';
-$route['kasir/add-nota'] = 'Kasir/addNota';
-$route['kasir/list-nota'] = 'Kasir/listNota';
-
-//customer service
-$route['nota/add'] = 'Nota/add';
-$route['nota/list'] = 'Nota/list';
-$route['nota/scan'] = 'Nota/scan';
-$route['nota/detail/(:num)'] = 'Nota/detail/$1';
-$route['nota/edit/(:num)'] = 'Nota/edit/$1';
-$route['nota/qrcode/(:any)'] = 'Nota/qrcode/$1';
-$route['nota/activity/(:any)'] = 'Nota/activity/$1';
-$route['nota/getHistory/(:any)'] = 'Nota/getHistory/$1';
-
-// Teknisi
-$route['nota/scan-teknisi'] = 'Nota/scanTeknisi';
-$route['nota/working/(:any)'] = 'Nota/working/$1';
-$route['nota/working-list'] = 'Nota/workingList';
-
-// Profil
-$route['teknisi/profil'] = 'Profil/teknisi';
-$route['owner/profil'] = 'Profil/owner';
+//admin
+$route['template-management'] = 'Admin/templateManagement';
+$route['add-template-proses'] = 'Admin/addTemplate';

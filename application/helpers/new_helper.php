@@ -18,11 +18,10 @@ function slug_seo($text){
 
 // tanggal indonesia
 function tanggal($tanggal){
-    $bulan = array(1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember');
-    
-    $pecahkan = explode('-', $tanggal);
-
-    return $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
+    $dateTimeString = $tanggal;
+    $dateTime = new DateTime($dateTimeString);
+    $newFormat = $dateTime->format('j F Y, g:i A'); // Tambahkan 'a' untuk menampilkan AM atau PM
+    return $newFormat;
 }
 
 function formatTanggal($date){
@@ -38,5 +37,22 @@ function rupiah($angka){
 function qrCode($text){
     QRcode::png($text,false,QR_ECLEVEL_H,5,10);
 }
+
+function deleteImage($address, $filename) {
+    $imagePath = FCPATH . $address . $filename;
+
+    if (file_exists($imagePath)) {
+        unlink($imagePath);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function isSessionDeclared($sessionName) {
+    return isset($_SESSION[$sessionName]);
+}
+
+
 
 ?>

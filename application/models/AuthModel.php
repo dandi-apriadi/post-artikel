@@ -1,37 +1,30 @@
 <?php 
 
-/*
 
-Authentikasi Model
-
-Fungsi :
-- Auhtentikasi Login
-- Mengambil Data User Yang Sedang Login
-
- */
 class AuthModel extends CI_Model{
 
-	public $table = 'user';
+	public $table = 'users';
 	public function login($email){
-		$this->db->select(array('id', 'email', 'password', 'role'));
+		$this->db->select(array('userid', 'email', 'password', 'role'));
 
-		return $this->db->get_where('user', array('email' => $email))->row();
+		return $this->db->get_where('users', array('email' => $email))->row();
 	}
 
 	// mengambil data yang sedang login
 	public function getDataLoggedIn($userId){
 		$this->db->select('*');
-		$this->db->where('id', $userId);
-		$this->db->from('user');
+		$this->db->where('userid', $userId);
+		$this->db->from('users');
 
 		return $this->db->get()->row();
 	}
 
 	public function checkEmailVerified($email){
 		$this->db->where('email', $email);
-		$this->db->where('verified_email', 'yes');
+		$this->db->where('verified', 'yes');
         return $this->db->count_all_results($this->table);
 	}
+
 }
 
 ?>
